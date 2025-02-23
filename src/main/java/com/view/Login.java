@@ -12,7 +12,11 @@ import javax.swing.JPanel;
  * @author Cristian
  */
 public class Login extends javax.swing.JPanel {
-
+    
+    public PanelFormLogin panelFormLogin;
+    public PanelFormSignUp panelFormSignUp;
+    public PanelFormForgot panelFormForgot;
+    
     /**
      * Creates new form LoginPanel
      */
@@ -21,12 +25,12 @@ public class Login extends javax.swing.JPanel {
     }
     
     public void initFormSignUp() {
-        PanelFormSignUp panelFormSignUp = new PanelFormSignUp();
+        panelFormSignUp = new PanelFormSignUp();
         setPanelForm(panelFormSignUp);
     }
     
     public void initFormLogin() {
-        PanelFormLogin panelFormLogin = new PanelFormLogin();
+        panelFormLogin = new PanelFormLogin();
         setPanelForm(panelFormLogin);
         panelFormLogin.addEventForgotPassword(new ActionListener() {
             @Override
@@ -37,7 +41,7 @@ public class Login extends javax.swing.JPanel {
     }
     
     public void initFormForgot() {
-        PanelFormForgot panelFormForgot = new PanelFormForgot();
+        panelFormForgot = new PanelFormForgot();
         setPanelForm(panelFormForgot);
         panelFormForgot.addEventBackLogin(new ActionListener() {
             @Override
