@@ -1,6 +1,9 @@
 package com.component;
 
+import com.demo.Demo;
+import java.awt.Component;
 import java.awt.event.ActionListener;
+import javax.swing.JFrame;
 
 /**
  *
@@ -156,8 +159,17 @@ public class PanelFormLogin extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //* Cambia la interfaz de Login por la de Background
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        // TODO add your handling code here:
+        Component comp = this.getParent();
+        
+        while((!(comp instanceof JFrame)) && comp != null)
+            comp = comp.getParent();
+        
+        if(comp instanceof Demo) {
+            Demo demoWindow = (Demo) comp;
+            demoWindow.goToBackgroundView();
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
 

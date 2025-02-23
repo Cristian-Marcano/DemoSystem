@@ -1,5 +1,9 @@
 package com.component;
 
+import com.demo.Demo;
+import java.awt.Component;
+import javax.swing.JFrame;
+
 /**
  *
  * @author Cristian
@@ -43,7 +47,7 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         separatorPassword = new javax.swing.JSeparator();
         inputPassword = new javax.swing.JPasswordField();
         iconShowAndHidden = new javax.swing.JLabel();
-        btnLogin = new javax.swing.JButton();
+        btnSignUp = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(210, 210, 210));
 
@@ -135,16 +139,16 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         iconShowAndHidden.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         iconShowAndHidden.setOpaque(true);
 
-        btnLogin.setBackground(new java.awt.Color(45, 155, 240));
-        btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnLogin.setForeground(new java.awt.Color(250, 250, 250));
-        btnLogin.setText("Registrarse");
-        btnLogin.setBorder(null);
-        btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLogin.setPreferredSize(new java.awt.Dimension(92, 30));
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+        btnSignUp.setBackground(new java.awt.Color(45, 155, 240));
+        btnSignUp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnSignUp.setForeground(new java.awt.Color(250, 250, 250));
+        btnSignUp.setText("Registrarse");
+        btnSignUp.setBorder(null);
+        btnSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSignUp.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnSignUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
+                btnSignUpActionPerformed(evt);
             }
         });
 
@@ -195,7 +199,7 @@ public class PanelFormSignUp extends javax.swing.JPanel {
                 .addGap(25, 25, 25))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -242,18 +246,27 @@ public class PanelFormSignUp extends javax.swing.JPanel {
                     .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(iconShowAndHidden, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLoginActionPerformed
+    //* Cambia la interfaz de Login por la de Background
+    private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
+        Component comp = this.getParent();
+        
+        while((!(comp instanceof JFrame)) && comp != null)
+            comp = comp.getParent();
+        
+        if(comp instanceof Demo) {
+            Demo demoWindow = (Demo) comp;
+            demoWindow.goToBackgroundView();
+        }
+    }//GEN-LAST:event_btnSignUpActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnSignUp;
     private javax.swing.JLabel iconShowAndHidden;
     private javax.swing.JTextField inputCI;
     private javax.swing.JTextField inputFirstName;
