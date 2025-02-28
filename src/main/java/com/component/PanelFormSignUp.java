@@ -1,8 +1,6 @@
 package com.component;
 
-import com.demo.Demo;
-import java.awt.Component;
-import javax.swing.JFrame;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -15,7 +13,10 @@ public class PanelFormSignUp extends javax.swing.JPanel {
      */
     public PanelFormSignUp() {
         initComponents();
-        
+    }
+    
+    public void addEventSignUp(ActionListener event) {
+        btnSignUp.addActionListener(event);
     }
 
     /**
@@ -146,11 +147,6 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         btnSignUp.setBorder(null);
         btnSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSignUp.setPreferredSize(new java.awt.Dimension(92, 30));
-        btnSignUp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignUpActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -250,19 +246,6 @@ public class PanelFormSignUp extends javax.swing.JPanel {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    //* Cambia la interfaz de Login por la de Background
-    private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
-        Component comp = this.getParent();
-        
-        while((!(comp instanceof JFrame)) && comp != null)
-            comp = comp.getParent();
-        
-        if(comp instanceof Demo) {
-            Demo demoWindow = (Demo) comp;
-            demoWindow.goToBackgroundView();
-        }
-    }//GEN-LAST:event_btnSignUpActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
