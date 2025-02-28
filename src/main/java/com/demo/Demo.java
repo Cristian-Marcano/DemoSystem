@@ -1,22 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.demo;
+
+import com.model.User;
+import com.view.Background;
+import com.view.Login;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Cristian
  */
 public class Demo extends javax.swing.JFrame {
-
+    
+    public static Login login;
+    public static Background background;
+    public static User user;
+    
     /**
      * Creates new form Demo
      */
     public Demo() {
+        user = new User(0, "Usuario1", "12345678", "admin", true);
+        boolean logged = false;
         initComponents();
+        login = new Login();
+        if(logged) login.initFormLogin();
+        else login.initFormSignUp();
+        setContentPane(login);
     }
-
+    
+    public void goToBackgroundView() {
+        background = new Background();
+        setView(background);
+    }
+    
+    public void goToLoginView() {
+        login = new Login();
+        setView(login);
+    }
+    
+    private void setView(JPanel view) {
+        setContentPane(view);
+        repaint();
+        revalidate();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,7 +55,6 @@ public class Demo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1032, 680));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -42,6 +68,7 @@ public class Demo extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -53,6 +80,7 @@ public class Demo extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+        /*
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -69,10 +97,12 @@ public class Demo extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Demo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        */
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Demo().setVisible(true);
             }
