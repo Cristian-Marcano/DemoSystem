@@ -27,6 +27,12 @@ public class Login extends javax.swing.JPanel {
     public void initFormSignUp() {
         panelFormSignUp = new PanelFormSignUp();
         setPanelForm(panelFormSignUp);
+        panelFormSignUp.addEventSignUp(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                initFormLogin();
+            }
+        });
     }
     
     public void initFormLogin() {
