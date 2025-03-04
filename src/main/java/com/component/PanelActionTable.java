@@ -1,7 +1,6 @@
 package com.component;
 
 import com.util.TableActionEvent;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,8 +48,6 @@ public class PanelActionTable extends javax.swing.JPanel {
 
         btnActionRemove = new javax.swing.JButton();
         btnActionEdit = new javax.swing.JButton();
-
-        setOpaque(false);
 
         btnActionRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/close.png"))); // NOI18N
         btnActionRemove.setToolTipText("Remove");
