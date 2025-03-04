@@ -13,9 +13,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class TableActionCellRender extends DefaultTableCellRenderer {
 
     private boolean onlyBtn;
+    private Color rowOddBg, rowEvenBg;
     
-    public TableActionCellRender(boolean only) {
+    public TableActionCellRender(boolean only, Color rowOddBg, Color rowEvenBg) {
         onlyBtn = only;
+        this.rowOddBg = rowOddBg;
+        this.rowEvenBg = rowEvenBg;
     }
     
     @Override
@@ -23,10 +26,14 @@ public class TableActionCellRender extends DefaultTableCellRenderer {
         Component com = super.getTableCellRendererComponent(jtable, o, isSeleted, bln1, row, column);
         PanelActionTable actionTable = new PanelActionTable();
         actionTable.onlyRemoveBtn(onlyBtn);
-        if (isSeleted == false && row % 2 == 0) {
-            actionTable.setBackground(com.getBackground());
+        if (isSeleted && row % 2 == 0) {
+            actionTable.setBackground(rowEvenBg.darker());
+        } else if(isSeleted) {
+            actionTable.setBackground(rowOddBg.darker());
+        } else if(row % 2 == 0) {
+            actionTable.setBackground(rowEvenBg);
         } else {
-            actionTable.setBackground(com.getBackground());
+            actionTable.setBackground(rowOddBg);
         }
         return actionTable;
     }
