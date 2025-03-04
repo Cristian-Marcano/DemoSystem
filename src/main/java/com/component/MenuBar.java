@@ -35,7 +35,7 @@ public class MenuBar extends javax.swing.JPanel {
         btnLogOut = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(41, 117, 185));
-        setMinimumSize(new java.awt.Dimension(405, 680));
+        setMinimumSize(new java.awt.Dimension(325, 680));
 
         title.setFont(new java.awt.Font("Bahnschrift", 0, 36)); // NOI18N
         title.setForeground(new java.awt.Color(255, 255, 255));
