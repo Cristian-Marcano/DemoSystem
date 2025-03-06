@@ -9,7 +9,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -111,11 +110,11 @@ public class MaterialTabbed extends JTabbedPane {
             g2.dispose();
         }
         
-         @Override
+        @Override
         protected void paintContentBorder(Graphics grphcs, int tabPlacement, int selectedIndex) {
             Graphics2D g2 = (Graphics2D) grphcs.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(new Color(200, 200, 200));
+            g2.setColor(new Color(210, 210, 210));
             Insets insets = getTabAreaInsets(tabPlacement);
             int width = tabPane.getWidth();
             int height = tabPane.getHeight();
@@ -151,6 +150,18 @@ public class MaterialTabbed extends JTabbedPane {
             if (tabPane.isOpaque()) {
                 super.paintTabBackground(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
             }
+            
+            Graphics2D g2d = (Graphics2D) g.create();
+            
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            if(isSelected) {
+                g2d.setColor(new Color(210,210,210));
+            } else {
+                g2d.setColor(new Color(190,190,190));
+            }
+            
+            g2d.fillRect(x, y, w, h);
         }
     }
 }
