@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JComponent;
@@ -63,6 +64,18 @@ public class MaterialTabbed extends JTabbedPane {
                         animator.start();
                     }
                 }   
+            });
+            
+            tabPane.addMouseMotionListener(new MouseAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    int tabIndex = indexAtLocation(e.getX(), e.getY());
+                    if(tabIndex != -1 && e.getY() < getBoundsAt(tabIndex).y + getBoundsAt(tabIndex).height) {
+                        tabPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    } else {
+                        tabPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    }
+                }
             });
         }
         
@@ -130,7 +143,7 @@ public class MaterialTabbed extends JTabbedPane {
         
         @Override
         protected void paintFocusIndicator(Graphics grphcs, int i, Rectangle[] rctngls, int i1, Rectangle rctngl, Rectangle rctngl1, boolean bln) {
-            tabPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            
         }
         
         @Override
