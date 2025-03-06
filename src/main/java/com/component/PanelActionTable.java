@@ -46,15 +46,17 @@ public class PanelActionTable extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnActionRemove = new javax.swing.JButton();
-        btnActionEdit = new javax.swing.JButton();
+        btnActionRemove = new com.component.complement.ActionButton();
+        btnActionEdit = new com.component.complement.ActionButton();
 
+        btnActionRemove.setBackground(new java.awt.Color(234, 78, 76));
         btnActionRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/close.png"))); // NOI18N
         btnActionRemove.setToolTipText("Remove");
         btnActionRemove.setBorder(null);
         btnActionRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        btnActionEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit.png"))); // NOI18N
+        btnActionEdit.setBackground(new java.awt.Color(117, 231, 104));
+        btnActionEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit-icon.png"))); // NOI18N
         btnActionEdit.setToolTipText("Edit");
         btnActionEdit.setBorder(null);
         btnActionEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
