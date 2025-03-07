@@ -2,6 +2,7 @@ package com.component.complement;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -9,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -33,6 +35,8 @@ public class MaterialTabbed extends JTabbedPane {
         private Animator animator;
         private Rectangle currentRectangle;
         private TimingTarget target;
+        
+        private final int iconTextGap = 0;
         
         public MaterialTabbedUI() {
         }
@@ -81,6 +85,13 @@ public class MaterialTabbed extends JTabbedPane {
         @Override
         protected Insets getTabInsets(int i, int i1) {
             return new Insets(10, 10, 10, 10);
+        }
+        
+        @Override
+        protected void layoutLabel(int tabPlacement, FontMetrics metrics, int tabIndex, String title, Icon icon,
+                                    Rectangle tabRect, Rectangle iconRect, Rectangle textRect, boolean isSelected) {
+            super.layoutLabel(tabPlacement, metrics, tabIndex, title, icon, tabRect, iconRect, textRect, isSelected);
+            textRect.x += iconTextGap;
         }
         
         @Override
