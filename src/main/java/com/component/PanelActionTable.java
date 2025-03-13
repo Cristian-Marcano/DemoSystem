@@ -1,6 +1,6 @@
 package com.component;
 
-import com.util.TableActionEvent;
+import com.event.TableActionEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
