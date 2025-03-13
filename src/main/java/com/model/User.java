@@ -5,6 +5,7 @@ package com.model;
  * @author Cristian
  */
 public class User {
+    
     private int id;
     private String username, password, position;
     private boolean access;
