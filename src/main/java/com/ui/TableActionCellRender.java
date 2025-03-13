@@ -1,4 +1,4 @@
-package com.util;
+package com.ui;
 
 import com.component.PanelActionTable;
 import java.awt.Color;

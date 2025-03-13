@@ -1,6 +1,7 @@
-package com.util;
+package com.ui;
 
 import com.component.PanelActionTable;
+import com.event.TableActionEvent;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.DefaultCellEditor;
