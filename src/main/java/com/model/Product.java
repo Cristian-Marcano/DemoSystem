@@ -1,5 +1,7 @@
 package com.model;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Cristian
@@ -8,9 +10,9 @@ public class Product {
     
     private int id, availability;
     private String title, detail;
-    private double price;
+    private BigDecimal price;
     
-    public Product(int id, int availability, String title, String detail, double price) {
+    public Product(int id, int availability, String title, String detail, BigDecimal price) {
         this.id = id;
         this.availability = availability;
         this.title = title;
@@ -31,7 +33,7 @@ public class Product {
         this.detail = detail;
     }
     
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
     
@@ -52,7 +54,7 @@ public class Product {
         return detail;
     }
     
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 }
