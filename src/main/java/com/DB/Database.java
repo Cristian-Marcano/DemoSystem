@@ -70,7 +70,7 @@ public class Database {
             //*  Se les coloca estos por defecto (son los de mi PC xd)
             host = "localhost";
             port = 3306;
-            db = "ferrominera_project";
+            db = "demo_service";
             username = "root";
             password = "Contraseña1/";
         }
