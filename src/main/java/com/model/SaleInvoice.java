@@ -1,5 +1,6 @@
 package com.model;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -9,10 +10,10 @@ import java.sql.Timestamp;
 public class SaleInvoice {
     
     private int id, userId, clientId;
-    private double total;
+    private BigDecimal total;
     private Timestamp createAt;
     
-    public SaleInvoice(int id, int userId, int clientId, double total, Timestamp createAt) {
+    public SaleInvoice(int id, int userId, int clientId, BigDecimal total, Timestamp createAt) {
         this.id = id;
         this.userId = userId;
         this.clientId = clientId;
@@ -21,7 +22,7 @@ public class SaleInvoice {
     }
     
     //* Setters
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
     
@@ -42,7 +43,11 @@ public class SaleInvoice {
         return clientId;
     }
     
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
+    }
+    
+    public Timestamp getCreateAt() {
+        return createAt;
     }
 }
