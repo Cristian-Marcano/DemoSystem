@@ -86,6 +86,15 @@ public class ProductService extends Database {
         statement.setString(2, product.getDetail());
         statement.setInt(3, product.getAvailability());
         statement.setBigDecimal(4, product.getPrice());
+        statement.executeUpdate();
         closeConnection();
+    }
+    
+    public void decreaseStock(int id, int quantity) throws SQLException {
+        String sql = "UPDATE product SET availability = availability - ? WHERE id = ?";
+        statement = connection.prepareStatement(sql);
+        statement.setInt(1, quantity);
+        statement.setInt(2, id);
+        statement.executeUpdate();
     }
 }
