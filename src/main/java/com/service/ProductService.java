@@ -2,6 +2,7 @@ package com.service;
 
 import com.DB.Database;
 import com.model.Product;
+import com.model.Sale;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -90,11 +91,24 @@ public class ProductService extends Database {
         closeConnection();
     }
     
+    //* Reducir el stock de un producto
     public void decreaseStock(int id, int quantity) throws SQLException {
         String sql = "UPDATE product SET availability = availability - ? WHERE id = ?";
         statement = connection.prepareStatement(sql);
         statement.setInt(1, quantity);
         statement.setInt(2, id);
         statement.executeUpdate();
+    }
+    
+    //* Reducir el stock a cada uno de los productos que fueron vendidos
+    public void decreaseStockProducts(List<Sale> sales) throws SQLException {
+        String sql = "UPDATE product SET availability = availability - ? WHERE id = ?";
+        statement = connection.prepareStatement(sql);
+        for(Sale sale: sales) {
+            statement.setInt(1, sale.getQuantity());
+            statement.setInt(2, sale.getProductId());
+            statement.addBatch();
+        }
+        statement.executeBatch();
     }
 }
