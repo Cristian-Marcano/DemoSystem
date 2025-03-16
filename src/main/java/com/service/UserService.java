@@ -12,6 +12,8 @@ import java.util.List;
 /**
  *
  * @author Cristian
+ * Clase que realiza operaciones a la tabla user_account en la DB
+ * de MySQL 
  */
 public class UserService extends Database {
     

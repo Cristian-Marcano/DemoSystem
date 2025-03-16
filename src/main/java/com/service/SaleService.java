@@ -10,9 +10,12 @@ import java.util.List;
 /**
  *
  * @author Cristian
+ * Clase que realiza operaciones a la tabla product en la DB
+ * de MySQL 
  */
 public class SaleService extends Database {
     
+    //* Obtener venta por el id
     public Object[] getSale(int id) throws SQLException {
         String sql = "SELECT * FROM sale AS s JOIN product AS p ON s.product_id = p.id WHERE id = ?";
         applyConnection();
@@ -29,6 +32,7 @@ public class SaleService extends Database {
         return sale;
     }
     
+    //* Obtener ventas por el id de factura (invoice)
     public List<Object[]> getSalesByInvoice(int saleInvoiceId) throws SQLException {
         String sql = "SELECT * FROM sale WHERE sale_invoice_id = ?";
         applyConnection();
@@ -45,6 +49,7 @@ public class SaleService extends Database {
         return sales;
     }
     
+    //* Crear ventas
     public void createSales(List<Sale> sales) throws SQLException {
         String sql = "INSERT INTO sale(quantity, amount, product_id, sale_invoice_id) VALUES (?,?,?,?)";
         statement = connection.prepareStatement(sql);
@@ -60,6 +65,7 @@ public class SaleService extends Database {
         closeConnection();
     }
     
+    //* Editar ventas
     public void updateSales(List<Sale> sales) throws SQLException {
         String sql = "UPADATE sale SET quantity = ?, amount = ? WHERE id = ?";
         applyConnection();
@@ -74,6 +80,7 @@ public class SaleService extends Database {
         closeConnection();
     }
     
+    //* remover venta
     public void removeSale(int id) throws SQLException {
         String sql = "DELETE FROM sale WHERE id = ?";
         applyConnection();
