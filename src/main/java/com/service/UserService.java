@@ -29,7 +29,7 @@ public class UserService extends Database {
             user = new Object[]{new User(result.getInt("u.id"), result.getString("u.username"), result.getString("u.keyword"), 
                                     result.getString("position"), result.getBoolean("u.access")),
                                 new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_account_id"), result.getString("ui.first_name"),
-                                    result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("ui.email"))};
+                                    result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("ui.ci"))};
         closeConnection();
         return user;
     }
@@ -74,7 +74,7 @@ public class UserService extends Database {
             users.add(new Object[]{new User(result.getInt("u.id"), result.getString("u.username"), result.getString("u.keyword"),
                                         result.getString("u.position"), result.getBoolean("u.access")),
                                    new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_id"), result.getString("ui.first_name"),
-                                        result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("pd.email"))});
+                                        result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("pd.ci"))});
         closeConnection();
         return users;
     }
@@ -98,7 +98,7 @@ public class UserService extends Database {
             users.add(new Object[]{new User(result.getInt("u.id"), result.getString("u.username"), result.getString("u.keyword"),
                                         result.getString("u.position"), result.getBoolean("u.access")),
                                    new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_id"), result.getString("ui.first_name"),
-                                        result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("pd.email"))});
+                                        result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("pd.ci"))});
         closeConnection();
         return users;
     }

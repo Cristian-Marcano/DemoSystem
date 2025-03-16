@@ -7,15 +7,15 @@ package com.model;
 public class UserInfo {
     
     private int id, userId;
-    private String firstName, lastName, phone, email;
+    private String firstName, lastName, phone, ci;
     
-    public UserInfo(int id, int userId, String firstName, String lastName, String phone, String email) {
+    public UserInfo(int id, int userId, String firstName, String lastName, String phone, String ci) {
         this.id = id;
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.email = email;
+        this.ci = ci;
     }
     
     //* Setters
@@ -31,8 +31,8 @@ public class UserInfo {
         this.phone = phone;
     }
     
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCi(String ci) {
+        this.ci = ci;
     }
     
     //* Getters
@@ -56,7 +56,7 @@ public class UserInfo {
         return phone;
     }
     
-    public String getEmail() {
-        return email;
+    public String getCi() {
+        return ci;
     }
 }
