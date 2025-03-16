@@ -80,12 +80,22 @@ public class SaleService extends Database {
         closeConnection();
     }
     
-    //* remover venta
+    //* Remover venta
     public void removeSale(int id) throws SQLException {
         String sql = "DELETE FROM sale WHERE id = ?";
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setInt(1, id);
+        statement.executeUpdate();
+        closeConnection();
+    }
+    
+    //* Remover ventas por el id de la factura
+    public void removeSalesByInvoice(int saleInvoiceId) throws SQLException {
+        String sql = "DELETE FROM sale WHERE sale_invoice_id = ?";
+        applyConnection();
+        statement = connection.prepareStatement(sql);
+        statement.setInt(1, saleInvoiceId);
         statement.executeUpdate();
         closeConnection();
     }
