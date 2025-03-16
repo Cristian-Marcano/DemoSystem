@@ -1,10 +1,13 @@
 package com.event;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author Cristian
  */
 public interface TableStockEvent {
     
-    public double stopEditing(int id, int value) throws Exception;
+    public BigDecimal stopEditing(int id, int value) throws Exception;
+    
 }
