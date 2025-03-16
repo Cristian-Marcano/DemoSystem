@@ -93,12 +93,21 @@ public class SaleInvoiceService extends Database {
     public void updateSaleInvoice(SaleInvoice invoice) throws SQLException {
         String sql = "UPDATE sale_invoice SET total = ?, user_account_id = ?, costumer_id = ?, create_at = ? WHERE id = ?";
         applyConnection();
-        statement = connection.prepareCall(sql);
+        statement = connection.prepareStatement(sql);
         statement.setBigDecimal(1, invoice.getTotal());
         statement.setInt(2, invoice.getUserId());
         statement.setInt(3, invoice.getClientId());
         statement.setTimestamp(4, invoice.getCreateAt());
         statement.setInt(5, invoice.getId());
+        statement.executeUpdate();
+        closeConnection();
+    }
+    
+    public void removeSaleInvoice(int id) throws SQLException {
+        String sql = "DELETE * FROM sale_invoice WHERE id = ?";
+        applyConnection();
+        statement = connection.prepareStatement(sql);
+        statement.setInt(1, id);
         statement.executeUpdate();
         closeConnection();
     }
