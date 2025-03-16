@@ -1,6 +1,7 @@
 package com.service;
 
 import com.DB.Database;
+import com.model.Product;
 import com.model.Sale;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,30 +13,34 @@ import java.util.List;
  */
 public class SaleService extends Database {
     
-    public Sale getSale(int id) throws SQLException {
-        String sql = "SELECT * FROM sale WHERE id = ?";
+    public Object[] getSale(int id) throws SQLException {
+        String sql = "SELECT * FROM sale AS s JOIN product AS p ON s.product_id = p.id WHERE id = ?";
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setInt(1, id);
         result = statement.executeQuery();
-        Sale sale = null;
+        Object[] sale = null;
         if(result.next())
-            sale = new Sale(result.getInt("id"), result.getInt("sale_invoice_id"),result.getInt("product_id"),
-                            result.getInt("quantity"), result.getBigDecimal("amount"));
+            sale = new Object[]{new Sale(result.getInt("s.id"), result.getInt("s.sale_invoice_id"),result.getInt("s.product_id"),
+                                            result.getInt("s.quantity"), result.getBigDecimal("s.amount")),
+                                new Product(result.getInt("p.id"), result.getInt("p.availability"), result.getString("p.title"),
+                                            result.getString("p.detail"), result.getBigDecimal("p.price"))};
         closeConnection();
         return sale;
     }
     
-    public List<Sale> getSalesByInvoice(int saleInvoiceId) throws SQLException {
+    public List<Object[]> getSalesByInvoice(int saleInvoiceId) throws SQLException {
         String sql = "SELECT * FROM sale WHERE sale_invoice_id = ?";
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setInt(1, saleInvoiceId);
         result = statement.executeQuery();
-        List<Sale> sales = new ArrayList<>();
+        List<Object[]> sales = new ArrayList<>();
         while(result.next())
-            sales.add(new Sale(result.getInt("id"), result.getInt("sale_invoice_id"),result.getInt("product_id"),
-                                result.getInt("quantity"), result.getBigDecimal("amount")));
+            sales.add(new Object[]{new Sale(result.getInt("s.id"), result.getInt("s.sale_invoice_id"),result.getInt("s.product_id"),
+                                            result.getInt("s.quantity"), result.getBigDecimal("s.amount")),
+                                   new Product(result.getInt("p.id"), result.getInt("p.availability"), result.getString("p.title"),
+                                                result.getString("p.detail"), result.getBigDecimal("p.price"))});
         closeConnection();
         return sales;
     }
