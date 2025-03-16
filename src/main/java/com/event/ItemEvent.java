@@ -8,6 +8,6 @@ import com.model.Product;
  */
 public interface ItemEvent {
     
-    public void itemClick(Product product);
+    public void onClick(Product product);
     
 }
