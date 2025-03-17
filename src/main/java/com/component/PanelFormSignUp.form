@@ -224,7 +224,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="Usuario" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Nombre" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelLastName">
@@ -266,7 +266,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="Usuario" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Apellido" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelCI">
@@ -308,7 +308,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="Usuario" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Cedula" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelPhone">
@@ -350,7 +350,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="Usuario" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Telefono" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelPassword">
@@ -389,6 +389,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
+        <Property name="name" type="java.lang.String" value="Contrase&#xf1;a" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="iconShowAndHidden">
@@ -412,6 +413,9 @@
         </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="iconShowAndHiddenMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSignUp">
       <Properties>
@@ -435,6 +439,9 @@
           <Dimension value="[92, 30]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSignUpActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -1,6 +1,10 @@
 package com.component;
 
-import java.awt.event.ActionListener;
+import com.event.FormAuthEvent;
+import com.util.ValidateInput;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -8,15 +12,15 @@ import java.awt.event.ActionListener;
  */
 public class PanelFormSignUp extends javax.swing.JPanel {
 
+    private boolean hide = false;
+    private FormAuthEvent authEvent;
+    
     /**
      * Creates new form PanelFormSignUp
      */
-    public PanelFormSignUp() {
+    public PanelFormSignUp(FormAuthEvent authEvent) {
         initComponents();
-    }
-    
-    public void addEventSignUp(ActionListener event) {
-        btnSignUp.addActionListener(event);
+        this.authEvent = authEvent;
     }
 
     /**
@@ -81,7 +85,7 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         inputFirstName.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputFirstName.setForeground(new java.awt.Color(55, 55, 55));
         inputFirstName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        inputFirstName.setName("Usuario"); // NOI18N
+        inputFirstName.setName("Nombre"); // NOI18N
 
         labelLastName.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelLastName.setForeground(new java.awt.Color(60, 60, 60));
@@ -94,7 +98,7 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         inputLastName.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputLastName.setForeground(new java.awt.Color(55, 55, 55));
         inputLastName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        inputLastName.setName("Usuario"); // NOI18N
+        inputLastName.setName("Apellido"); // NOI18N
 
         labelCI.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelCI.setForeground(new java.awt.Color(60, 60, 60));
@@ -107,7 +111,7 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         inputCI.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputCI.setForeground(new java.awt.Color(55, 55, 55));
         inputCI.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        inputCI.setName("Usuario"); // NOI18N
+        inputCI.setName("Cedula"); // NOI18N
 
         labelPhone.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelPhone.setForeground(new java.awt.Color(60, 60, 60));
@@ -120,7 +124,7 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         inputPhone.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputPhone.setForeground(new java.awt.Color(55, 55, 55));
         inputPhone.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        inputPhone.setName("Usuario"); // NOI18N
+        inputPhone.setName("Telefono"); // NOI18N
 
         labelPassword.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelPassword.setForeground(new java.awt.Color(60, 60, 60));
@@ -132,6 +136,7 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         inputPassword.setBackground(new java.awt.Color(180, 180, 180));
         inputPassword.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
+        inputPassword.setName("Contraseña"); // NOI18N
 
         iconShowAndHidden.setBackground(new java.awt.Color(180, 180, 180));
         iconShowAndHidden.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -139,6 +144,11 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         iconShowAndHidden.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
         iconShowAndHidden.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         iconShowAndHidden.setOpaque(true);
+        iconShowAndHidden.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                iconShowAndHiddenMouseClicked(evt);
+            }
+        });
 
         btnSignUp.setBackground(new java.awt.Color(45, 155, 240));
         btnSignUp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -147,6 +157,11 @@ public class PanelFormSignUp extends javax.swing.JPanel {
         btnSignUp.setBorder(null);
         btnSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSignUp.setPreferredSize(new java.awt.Dimension(92, 30));
+        btnSignUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignUpActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -246,6 +261,34 @@ public class PanelFormSignUp extends javax.swing.JPanel {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iconShowAndHiddenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconShowAndHiddenMouseClicked
+        hide = !hide;
+        if(hide) {
+            inputPassword.setEchoChar((char) 0);
+            iconShowAndHidden.setIcon(new ImageIcon(getClass().getResource("/closed-eye.png")));
+        } else {
+            inputPassword.setEchoChar('•');
+            iconShowAndHidden.setIcon(new ImageIcon(getClass().getResource("/eye.png")));
+        }
+    }//GEN-LAST:event_iconShowAndHiddenMouseClicked
+
+    private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
+        try {
+            ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputFirstName, inputLastName, inputCI, inputPhone, inputPassword));
+            
+            ValidateInput.isMinimumLength(inputPassword, 8);
+            
+            String username = inputUsername.getText(), firstName = inputFirstName.getText(), lastName = inputLastName.getText(),
+                    ci = inputCI.getText(), phone = inputPhone.getText(), password = new String(inputPassword.getPassword());
+            
+            authEvent.onSignUp(username, password, firstName, lastName, ci, phone);
+            
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSignUpActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
