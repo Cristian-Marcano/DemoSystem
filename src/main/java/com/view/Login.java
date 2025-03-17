@@ -3,8 +3,18 @@ package com.view;
 import com.component.PanelFormForgot;
 import com.component.PanelFormLogin;
 import com.component.PanelFormSignUp;
+import com.demo.Demo;
+import com.event.FormAuthEvent;
+import com.model.User;
+import com.model.UserInfo;
+import com.service.UserInfoService;
+import com.service.UserService;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -16,27 +26,104 @@ public class Login extends javax.swing.JPanel {
     public PanelFormLogin panelFormLogin;
     public PanelFormSignUp panelFormSignUp;
     public PanelFormForgot panelFormForgot;
+    private FormAuthEvent authEvent;
     
     /**
      * Creates new form LoginPanel
      */
     public Login() {
         initComponents();
+        
+        authEvent = new FormAuthEvent() {
+            @Override
+            public void onLogin(String username, String password) throws Exception {
+                try {
+                    UserService userService = new UserService();
+                    User user = userService.getUser(username);
+                    
+                    if(user == null) throw new Exception("Datos invalidos");
+                    
+                    if(user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                        Demo.user = user;
+                        
+                        initBackground();
+                        
+                    } else throw new Exception("Datos invalidos");
+                    
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                    JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onSignUp(String username, String password, String firstName, String lastName, String ci, String phone) {
+                UserService userService = new UserService();
+                UserInfoService userInfoService = new UserInfoService();
+                
+                try {
+                    int userId = userService.createUser(username, password, "admin");
+                    
+                    UserInfo userInfo = new UserInfo(0, userId, firstName, lastName, phone, ci);
+                    
+                    userInfoService.createUserInfo(userInfo);
+                    
+                    initFormLogin();
+                } catch (SQLException e) {
+                    try {
+                        userInfoService.applyRollBack();
+                    } catch (SQLException ex) { }
+                    System.err.println(e.getMessage());
+                    JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onForgot(String username, String firstName, String lastName, String ci) throws Exception {
+                try {
+                    UserService userService = new UserService();
+                    User user = userService.getUser(username);
+                    
+                    if(user == null) throw new Exception("Datos invalidos");
+                    
+                    UserInfoService userInfoService = new UserInfoService();
+                    UserInfo userInfo = userInfoService.getUserInfo(user.getId());
+                    
+                    if(user.getUsername().equals(username) && userInfo.getFirstName().equals(firstName) 
+                            && userInfo.getLastName().equals(lastName) && userInfo.getCi().equals(ci)) {
+                        
+                        Demo.user = user;
+                        
+                        initBackground();
+                        
+                    } else throw new Exception("Datos invalidos");
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                    JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+    }
+    
+    public void initBackground() {
+        Component comp = this.getParent();
+        
+        while((!(comp instanceof JFrame)) && comp != null)
+            comp = comp.getParent();
+        
+        if(comp instanceof Demo) {
+            Demo demoWindow = (Demo) comp;
+            demoWindow.goToBackgroundView();
+        }
     }
     
     public void initFormSignUp() {
-        panelFormSignUp = new PanelFormSignUp();
+        panelFormSignUp = new PanelFormSignUp(authEvent);
         setPanelForm(panelFormSignUp);
-        panelFormSignUp.addEventSignUp(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                initFormLogin();
-            }
-        });
     }
     
     public void initFormLogin() {
-        panelFormLogin = new PanelFormLogin();
+        panelFormLogin = new PanelFormLogin(authEvent);
         setPanelForm(panelFormLogin);
         panelFormLogin.addEventForgotPassword(new ActionListener() {
             @Override
@@ -47,7 +134,7 @@ public class Login extends javax.swing.JPanel {
     }
     
     public void initFormForgot() {
-        panelFormForgot = new PanelFormForgot();
+        panelFormForgot = new PanelFormForgot(authEvent);
         setPanelForm(panelFormForgot);
         panelFormForgot.addEventBackLogin(new ActionListener() {
             @Override
