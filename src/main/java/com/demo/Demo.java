@@ -1,8 +1,12 @@
 package com.demo;
 
+import com.DB.Database;
 import com.model.User;
+import com.service.UserService;
 import com.view.Background;
 import com.view.Login;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -19,13 +23,20 @@ public class Demo extends javax.swing.JFrame {
      * Creates new form Demo
      */
     public Demo() {
-        user = new User(0, "Usuario1", "12345678", "admin", true);
-        boolean logged = false;
         initComponents();
-        login = new Login();
-        if(logged) login.initFormLogin();
-        else login.initFormSignUp();
-        setContentPane(login);
+        try {
+            login = new Login();
+            
+            if(new UserService().getCountUsers() == 0) {
+                login.initFormSignUp();
+            } else login.initFormLogin();
+            
+            setContentPane(login);
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null,"Base de datos no encontrada","Error",JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+        
     }
     
     public void goToBackgroundView() {
@@ -100,6 +111,11 @@ public class Demo extends javax.swing.JFrame {
         */
         //</editor-fold>
 
+        if(!Database.verifyController()) {
+            JOptionPane.showMessageDialog(null,"Conector de Base de Datos, No encontrado","Alerta",JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
