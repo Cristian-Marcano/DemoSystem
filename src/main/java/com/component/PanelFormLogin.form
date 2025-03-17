@@ -111,6 +111,9 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="3c" green="3c" red="3c" type="rgb"/>
         </Property>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="inputUsername"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Usuario:"/>
       </Properties>
     </Component>
@@ -150,6 +153,9 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="3c" green="3c" red="3c" type="rgb"/>
         </Property>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="inputPassword"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Contrase&#xf1;a:"/>
       </Properties>
     </Component>
@@ -175,6 +181,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
+        <Property name="name" type="java.lang.String" value="Contrase&#xf1;a" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="iconShowAndHidden">
@@ -198,6 +205,9 @@
         </Property>
         <Property name="opaque" type="boolean" value="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="iconShowAndHiddenMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnFotgotPassword">
       <Properties>

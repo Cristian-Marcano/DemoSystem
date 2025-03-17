@@ -1,21 +1,27 @@
 package com.component;
 
-import com.demo.Demo;
-import java.awt.Component;
+import com.event.FormAuthEvent;
+import com.util.ValidateInput;
 import java.awt.event.ActionListener;
-import javax.swing.JFrame;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Cristian
  */
 public class PanelFormLogin extends javax.swing.JPanel {
-
+    
+    private boolean hide = false;
+    private FormAuthEvent authEvent;
+    
     /**
      * Creates new form PanelFormLogin
      */
-    public PanelFormLogin() {
+    public PanelFormLogin(FormAuthEvent authEvent) {
         initComponents();
+        this.authEvent = authEvent;
     }
     
     public void addEventForgotPassword(ActionListener event) {
@@ -52,6 +58,7 @@ public class PanelFormLogin extends javax.swing.JPanel {
 
         labelUsername.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelUsername.setForeground(new java.awt.Color(60, 60, 60));
+        labelUsername.setLabelFor(inputUsername);
         labelUsername.setText("Usuario:");
 
         separatorUsername.setForeground(new java.awt.Color(41, 117, 185));
@@ -64,6 +71,7 @@ public class PanelFormLogin extends javax.swing.JPanel {
 
         labelPassword.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelPassword.setForeground(new java.awt.Color(60, 60, 60));
+        labelPassword.setLabelFor(inputPassword);
         labelPassword.setText("Contraseña:");
 
         separatorPassword.setForeground(new java.awt.Color(41, 117, 185));
@@ -71,6 +79,7 @@ public class PanelFormLogin extends javax.swing.JPanel {
         inputPassword.setBackground(new java.awt.Color(180, 180, 180));
         inputPassword.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
+        inputPassword.setName("Contraseña"); // NOI18N
 
         iconShowAndHidden.setBackground(new java.awt.Color(180, 180, 180));
         iconShowAndHidden.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -78,6 +87,11 @@ public class PanelFormLogin extends javax.swing.JPanel {
         iconShowAndHidden.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
         iconShowAndHidden.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         iconShowAndHidden.setOpaque(true);
+        iconShowAndHidden.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                iconShowAndHiddenMouseClicked(evt);
+            }
+        });
 
         btnFotgotPassword.setBackground(new java.awt.Color(210, 210, 210));
         btnFotgotPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -159,18 +173,31 @@ public class PanelFormLogin extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    //* Cambia la interfaz de Login por la de Background
+    
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        Component comp = this.getParent();
-        
-        while((!(comp instanceof JFrame)) && comp != null)
-            comp = comp.getParent();
-        
-        if(comp instanceof Demo) {
-            Demo demoWindow = (Demo) comp;
-            demoWindow.goToBackgroundView();
+        try {
+            ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputPassword));
+            
+            String username = inputUsername.getText(), password = new String(inputPassword.getPassword());
+            
+            authEvent.onLogin(username, password);
+            
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void iconShowAndHiddenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconShowAndHiddenMouseClicked
+        hide = !hide;
+        if(hide) {
+            inputPassword.setEchoChar((char) 0);
+            iconShowAndHidden.setIcon(new ImageIcon(getClass().getResource("/closed-eye.png")));
+        } else {
+            inputPassword.setEchoChar('•');
+            iconShowAndHidden.setIcon(new ImageIcon(getClass().getResource("/eye.png")));
+        }
+    }//GEN-LAST:event_iconShowAndHiddenMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
