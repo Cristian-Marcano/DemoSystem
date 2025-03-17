@@ -126,6 +126,9 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="3c" green="3c" red="3c" type="rgb"/>
         </Property>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="inputUsername"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Usuario:"/>
       </Properties>
     </Component>
@@ -165,6 +168,9 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="3c" green="3c" red="3c" type="rgb"/>
         </Property>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="inputFirstName"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Nombre:"/>
       </Properties>
     </Component>
@@ -193,7 +199,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="Usuario" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Nombre" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelLastName">
@@ -203,6 +209,9 @@
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="3c" green="3c" red="3c" type="rgb"/>
+        </Property>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="inputLastName"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Apellido:"/>
       </Properties>
@@ -232,7 +241,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="Usuario" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Apellido" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelCI">
@@ -242,6 +251,9 @@
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="3c" green="3c" red="3c" type="rgb"/>
+        </Property>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="inputCI"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cedula:"/>
       </Properties>
@@ -271,7 +283,7 @@
             </MatteColorBorder>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="Usuario" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Cedula" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnInit">

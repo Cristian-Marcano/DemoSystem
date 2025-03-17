@@ -1,9 +1,10 @@
 package com.component;
 
-import com.demo.Demo;
-import java.awt.Component;
+import com.event.FormAuthEvent;
+import com.util.ValidateInput;
 import java.awt.event.ActionListener;
-import javax.swing.JFrame;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -11,11 +12,14 @@ import javax.swing.JFrame;
  */
 public class PanelFormForgot extends javax.swing.JPanel {
 
+    private FormAuthEvent authEvent;
+    
     /**
      * Creates new form PanelFormForgot
      */
-    public PanelFormForgot() {
+    public PanelFormForgot(FormAuthEvent authEvent) {
         initComponents();
+        this.authEvent = authEvent;
     }
     
     public void addEventBackLogin(ActionListener event) {
@@ -57,6 +61,7 @@ public class PanelFormForgot extends javax.swing.JPanel {
 
         labelUsername.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelUsername.setForeground(new java.awt.Color(60, 60, 60));
+        labelUsername.setLabelFor(inputUsername);
         labelUsername.setText("Usuario:");
 
         separatorUsername.setForeground(new java.awt.Color(41, 117, 185));
@@ -69,6 +74,7 @@ public class PanelFormForgot extends javax.swing.JPanel {
 
         labelFirstName.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelFirstName.setForeground(new java.awt.Color(60, 60, 60));
+        labelFirstName.setLabelFor(inputFirstName);
         labelFirstName.setText("Nombre:");
 
         separatorFirstName.setForeground(new java.awt.Color(41, 117, 185));
@@ -77,10 +83,11 @@ public class PanelFormForgot extends javax.swing.JPanel {
         inputFirstName.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputFirstName.setForeground(new java.awt.Color(55, 55, 55));
         inputFirstName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        inputFirstName.setName("Usuario"); // NOI18N
+        inputFirstName.setName("Nombre"); // NOI18N
 
         labelLastName.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelLastName.setForeground(new java.awt.Color(60, 60, 60));
+        labelLastName.setLabelFor(inputLastName);
         labelLastName.setText("Apellido:");
 
         separatorLastName.setForeground(new java.awt.Color(41, 117, 185));
@@ -89,10 +96,11 @@ public class PanelFormForgot extends javax.swing.JPanel {
         inputLastName.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputLastName.setForeground(new java.awt.Color(55, 55, 55));
         inputLastName.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        inputLastName.setName("Usuario"); // NOI18N
+        inputLastName.setName("Apellido"); // NOI18N
 
         labelCI.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelCI.setForeground(new java.awt.Color(60, 60, 60));
+        labelCI.setLabelFor(inputCI);
         labelCI.setText("Cedula:");
 
         separatorCI.setForeground(new java.awt.Color(41, 117, 185));
@@ -101,7 +109,7 @@ public class PanelFormForgot extends javax.swing.JPanel {
         inputCI.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputCI.setForeground(new java.awt.Color(55, 55, 55));
         inputCI.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        inputCI.setName("Usuario"); // NOI18N
+        inputCI.setName("Cedula"); // NOI18N
 
         btnInit.setBackground(new java.awt.Color(45, 155, 240));
         btnInit.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -188,16 +196,18 @@ public class PanelFormForgot extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    //* Cambia la interfaz de Login por la de Background
+    
     private void btnInitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInitActionPerformed
-        Component comp = this.getParent();
-        
-        while((!(comp instanceof JFrame)) && comp != null)
-            comp = comp.getParent();
-        
-        if(comp instanceof Demo) {
-            Demo demoWindow = (Demo) comp;
-            demoWindow.goToBackgroundView();
+        try {
+            ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputFirstName, inputLastName, inputCI));
+            
+            String username = inputUsername.getText(), firstName = inputFirstName.getText(), lastName = inputLastName.getText(), ci = inputCI.getText();
+            
+            authEvent.onForgot(username, firstName, lastName, ci);
+            
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnInitActionPerformed
 
