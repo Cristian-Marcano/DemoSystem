@@ -77,7 +77,7 @@ public class SaleInvoiceService extends Database {
     
     public int createSaleInvoice(BigDecimal total, int userId, int clientId) throws SQLException {
         String sql = "INSERT INTO sale_invoice(total, user_account_id, costumer_id) VALUES (?,?,?)";
-        applyConnection();
+        if(connection.isClosed()) applyConnection();
         if(connection.getAutoCommit()) connection.setAutoCommit(false);
         statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         statement.setBigDecimal(1, total);
