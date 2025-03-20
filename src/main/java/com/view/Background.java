@@ -1,5 +1,9 @@
 package com.view;
 
+import com.component.Header;
+import com.component.MenuBar;
+import com.component.SalePanel;
+import com.demo.Demo;
 import com.util.ShowJPanel;
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -10,16 +14,19 @@ import javax.swing.JPanel;
  */
 public class Background extends javax.swing.JPanel {
     
-    public ShowJPanel board, contentP;
+    public Header panelHeader;
+    public ShowJPanel board, headerP, contentP;
 
     /**
      * Creates new form Background
      */
     public Background() {
         initComponents();
-        
-//        if(Demo.admin)
-//            board = initPanel(, content, size)
+        panelHeader = new Header();
+        panelHeader.setUserInfo(Demo.user);
+        board = initPanel(new MenuBar(), dashboard, new Dimension(dashboard.getPreferredSize()));
+        headerP = initPanel(panelHeader, header, new Dimension(header.getPreferredSize()));
+        contentP = initPanel(new SalePanel(), content, new Dimension(content.getPreferredSize()));
     }
     
     private ShowJPanel initPanel(JPanel panel, JPanel container, Dimension size) {
@@ -38,6 +45,7 @@ public class Background extends javax.swing.JPanel {
     private void initComponents() {
 
         dashboard = new javax.swing.JPanel();
+        header = new javax.swing.JPanel();
         content = new javax.swing.JPanel();
 
         setMinimumSize(new java.awt.Dimension(1032, 680));
@@ -48,7 +56,7 @@ public class Background extends javax.swing.JPanel {
         });
 
         dashboard.setBackground(new java.awt.Color(41, 117, 185));
-        dashboard.setMinimumSize(new java.awt.Dimension(405, 680));
+        dashboard.setMinimumSize(new java.awt.Dimension(350, 100));
         dashboard.setPreferredSize(new java.awt.Dimension(405, 720));
 
         javax.swing.GroupLayout dashboardLayout = new javax.swing.GroupLayout(dashboard);
@@ -59,11 +67,24 @@ public class Background extends javax.swing.JPanel {
         );
         dashboardLayout.setVerticalGroup(
             dashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 720, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        header.setBackground(new java.awt.Color(240, 240, 240));
+
+        javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
+        header.setLayout(headerLayout);
+        headerLayout.setHorizontalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        headerLayout.setVerticalGroup(
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
 
         content.setBackground(new java.awt.Color(240, 240, 240));
-        content.setMinimumSize(new java.awt.Dimension(627, 680));
+        content.setMinimumSize(new java.awt.Dimension(100, 100));
 
         javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
         content.setLayout(contentLayout);
@@ -73,7 +94,7 @@ public class Background extends javax.swing.JPanel {
         );
         contentLayout.setVerticalGroup(
             contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 620, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -82,13 +103,17 @@ public class Background extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(dashboard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -108,5 +133,6 @@ public class Background extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel content;
     private javax.swing.JPanel dashboard;
+    private javax.swing.JPanel header;
     // End of variables declaration//GEN-END:variables
 }
