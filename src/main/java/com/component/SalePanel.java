@@ -9,6 +9,7 @@ import com.event.TableActionEvent;
 import com.event.TableStockEvent;
 import com.service.ProductService;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -39,6 +40,8 @@ public class SalePanel extends javax.swing.JPanel {
      */
     public SalePanel() {
         initComponents();
+        
+        selectClientRif.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         
         searchMenu = new JPopupMenu();
         searchMenu.setFocusable(false);
@@ -171,6 +174,7 @@ public class SalePanel extends javax.swing.JPanel {
         TitleClient = new javax.swing.JLabel();
         labelClientRif = new javax.swing.JLabel();
         separatorClientRif = new javax.swing.JSeparator();
+        selectClientRif = new com.component.complement.ComboBox<>();
         inputClientRif = new javax.swing.JTextField();
         labelClientFullName = new javax.swing.JLabel();
         separatorClienteFullName = new javax.swing.JSeparator();
@@ -234,9 +238,6 @@ public class SalePanel extends javax.swing.JPanel {
             }
         });
         inputSearch.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                inputSearchKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 inputSearchKeyReleased(evt);
             }
@@ -342,6 +343,12 @@ public class SalePanel extends javax.swing.JPanel {
 
         separatorClientRif.setForeground(new java.awt.Color(41, 117, 185));
 
+        selectClientRif.setBackground(new java.awt.Color(180, 180, 180));
+        selectClientRif.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        selectClientRif.setForeground(new java.awt.Color(55, 55, 55));
+        selectClientRif.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "V-", "E-", "J-" }));
+        selectClientRif.setBorder(null);
+
         inputClientRif.setBackground(new java.awt.Color(180, 180, 180));
         inputClientRif.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputClientRif.setForeground(new java.awt.Color(55, 55, 55));
@@ -411,9 +418,8 @@ public class SalePanel extends javax.swing.JPanel {
                             .addComponent(separatorClientPhone, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(separatorClienteFullName, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(separatorClientRif)
-                            .addComponent(inputClientRif, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                            .addComponent(inputClientFullName, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                            .addComponent(inputClientPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+                            .addComponent(inputClientFullName)
+                            .addComponent(inputClientPhone)
                             .addGroup(panelTabClientLayout.createSequentialGroup()
                                 .addGroup(panelTabClientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(labelClientEmail)
@@ -421,12 +427,16 @@ public class SalePanel extends javax.swing.JPanel {
                                     .addComponent(labelClientFullName)
                                     .addComponent(labelClientRif))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(inputClientEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))))
+                            .addComponent(inputClientEmail)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTabClientLayout.createSequentialGroup()
+                                .addComponent(selectClientRif, 0, 80, Short.MAX_VALUE)
+                                .addGap(0, 0, 0)
+                                .addComponent(inputClientRif, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(16, 16, 16))
             .addGroup(panelTabClientLayout.createSequentialGroup()
-                .addContainerGap(133, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAddClient, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelTabClientLayout.setVerticalGroup(
             panelTabClientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -438,7 +448,9 @@ public class SalePanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(separatorClientRif, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inputClientRif, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelTabClientLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(inputClientRif, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                    .addComponent(selectClientRif))
                 .addGap(18, 18, 18)
                 .addComponent(labelClientFullName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -579,10 +591,6 @@ public class SalePanel extends javax.swing.JPanel {
         btnAdd.setVisible(false);
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void inputSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputSearchKeyPressed
-        //        System.out.println("Hello key pressed");
-    }//GEN-LAST:event_inputSearchKeyPressed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel TitleClient;
@@ -608,6 +616,7 @@ public class SalePanel extends javax.swing.JPanel {
     private javax.swing.JLabel productPrice;
     private javax.swing.JLabel productStock;
     private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JComboBox<String> selectClientRif;
     private javax.swing.JSeparator separatorClientEmail;
     private javax.swing.JSeparator separatorClientPhone;
     private javax.swing.JSeparator separatorClientRif;
