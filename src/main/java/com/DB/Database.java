@@ -109,6 +109,11 @@ public class Database {
         }
     }
     
+    //* Verificar si la conexion de la base de datos esta activa
+    public boolean isConnected() throws SQLException {
+        return (!connection.isClosed());
+    }
+    
     //* Cerrar conexion con la Base de datos
     public void closeConnection() throws SQLException {
         if(connection!=null && (!connection.isClosed())) connection.close();
