@@ -1,6 +1,7 @@
 package com.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  *
@@ -56,5 +57,18 @@ public class Product {
     
     public BigDecimal getPrice() {
         return price;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        Product product = (Product) obj;
+        return id == product.getId();
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
