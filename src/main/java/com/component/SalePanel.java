@@ -7,7 +7,10 @@ import com.ui.TableActionCellEditor;
 import com.ui.TableActionCellRender;
 import com.event.TableActionEvent;
 import com.event.TableStockEvent;
+import com.model.Client;
+import com.service.ClientService;
 import com.service.ProductService;
+import com.util.ValidateInput;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.event.KeyEvent;
@@ -26,7 +29,8 @@ import javax.swing.JPopupMenu;
  * @author Cristian
  */
 public class SalePanel extends javax.swing.JPanel {
-
+    
+    private Client client = null;
     private JPopupMenu searchMenu;
     private PanelSearch panelSearch;
     private List<Product> listProductOnTable = new ArrayList<>();
@@ -42,6 +46,10 @@ public class SalePanel extends javax.swing.JPanel {
         initComponents();
         
         selectClientRif.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        
+        setVisibleFormClient(false);
+        
+        btnAddClient.setVisible(false);
         
         searchMenu = new JPopupMenu();
         searchMenu.setFocusable(false);
@@ -147,6 +155,43 @@ public class SalePanel extends javax.swing.JPanel {
         
         searchMenu.repaint();
         searchMenu.revalidate();
+    }
+    
+    public final void setVisibleFormClient(boolean visible) {
+        labelClientFullName.setVisible(visible);
+        labelClientPhone.setVisible(visible);
+        labelClientEmail.setVisible(visible);
+        
+        separatorClienteFullName.setVisible(visible);
+        separatorClientPhone.setVisible(visible);
+        separatorClientEmail.setVisible(visible);
+        
+        inputClientFullName.setVisible(visible);
+        inputClientPhone.setVisible(visible);
+        inputClientEmail.setVisible(visible);
+    }
+    
+    public final void setEnabledFormClient(boolean enable) {
+        inputClientFullName.setEnabled(enable);
+        inputClientPhone.setEnabled(enable);
+        inputClientEmail.setEnabled(enable);
+    }
+    
+    public void validateClientRif() {
+        ClientService clientService = new ClientService();
+            
+            try {
+                
+                if(clientService.isConnected()) {
+                    clientService.applyRollBack();
+                    clientService.closeConnection();
+                }
+                    
+                
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+            }
     }
 
     /**
@@ -348,12 +393,27 @@ public class SalePanel extends javax.swing.JPanel {
         selectClientRif.setForeground(new java.awt.Color(55, 55, 55));
         selectClientRif.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "V-", "E-", "J-" }));
         selectClientRif.setBorder(null);
+        selectClientRif.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                selectClientRifItemStateChanged(evt);
+            }
+        });
 
         inputClientRif.setBackground(new java.awt.Color(180, 180, 180));
         inputClientRif.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         inputClientRif.setForeground(new java.awt.Color(55, 55, 55));
         inputClientRif.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
         inputClientRif.setName("Cedula"); // NOI18N
+        inputClientRif.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputClientRifActionPerformed(evt);
+            }
+        });
+        inputClientRif.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                inputClientRifKeyTyped(evt);
+            }
+        });
 
         labelClientFullName.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelClientFullName.setForeground(new java.awt.Color(60, 60, 60));
@@ -400,6 +460,11 @@ public class SalePanel extends javax.swing.JPanel {
         btnAddClient.setText("Añadir");
         btnAddClient.setBorder(null);
         btnAddClient.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddClientActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelTabClientLayout = new javax.swing.GroupLayout(panelTabClient);
         panelTabClient.setLayout(panelTabClientLayout);
@@ -590,6 +655,86 @@ public class SalePanel extends javax.swing.JPanel {
         panelProductSelected.setVisible(false);
         btnAdd.setVisible(false);
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void inputClientRifKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputClientRifKeyTyped
+        char c = evt.getKeyChar();
+        if(!Character.isDigit(c) || (c == '0' && inputClientRif.getText().isEmpty()))
+            evt.consume(); //Bloquea caracteres no numericos y ceros iniciales
+        
+        if(client != null) {
+            client = null;
+            
+            setVisibleFormClient(false);
+            btnAddClient.setVisible(false);
+            
+            validateClientRif();
+        }
+    }//GEN-LAST:event_inputClientRifKeyTyped
+
+    private void inputClientRifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputClientRifActionPerformed
+        try {
+            String rif = ((String) selectClientRif.getSelectedItem()) + inputClientRif.getText();
+            
+            ClientService clientService = new ClientService();
+            
+            client = clientService.getClient(rif);
+            
+            if(client != null) {
+                inputClientFullName.setText(client.getFullName());
+                inputClientPhone.setText(client.getPhone());
+                inputClientEmail.setText(client.getEmail());
+                
+                setEnabledFormClient(false);
+            } else {
+                btnAddClient.setVisible(true);
+                setEnabledFormClient(true);
+                
+                inputClientFullName.setText("");
+                inputClientPhone.setText("");
+                inputClientEmail.setText("");
+            }
+            
+            setVisibleFormClient(true);
+            
+        } catch(SQLException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_inputClientRifActionPerformed
+
+    private void btnAddClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddClientActionPerformed
+        try {
+            ValidateInput.isEmptyOrBlank(List.of(inputClientFullName, inputClientPhone, inputClientEmail));
+            
+            ValidateInput.isMinimumLength(inputClientPhone, 10);
+            
+            String rif = ((String) selectClientRif.getSelectedItem()) + inputClientRif.getText(), fullName = inputClientFullName.getText(),
+                    phone = inputClientPhone.getText(), email = inputClientEmail.getText();
+            
+            ClientService clientService = new ClientService();
+            
+            int id = clientService.createClient(fullName, rif, phone, email);
+            
+            client = new Client(id, fullName, rif, email, phone);
+        } catch(SQLException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAddClientActionPerformed
+
+    private void selectClientRifItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_selectClientRifItemStateChanged
+        if(client != null) {
+            client = null;
+            
+            setVisibleFormClient(false);
+            btnAddClient.setVisible(false);
+            
+            validateClientRif();
+        }
+    }//GEN-LAST:event_selectClientRifItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
