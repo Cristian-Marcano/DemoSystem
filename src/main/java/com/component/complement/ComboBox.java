@@ -2,6 +2,7 @@ package com.component.complement;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -17,6 +18,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -66,8 +68,9 @@ public class ComboBox<E> extends JComboBox<E> {
         setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> jlist, Object o, int i, boolean bln, boolean bln1) {
-                Component com = super.getListCellRendererComponent(jlist, o, i, bln, bln1);
+                JLabel com = (JLabel) super.getListCellRendererComponent(jlist, o, i, bln, bln1);
                 setBorder(new EmptyBorder(5, 5, 5, 5));
+                com.setHorizontalAlignment(JLabel.CENTER);
                 if (bln) {
                     com.setBackground(getBackground().darker());
                 }
