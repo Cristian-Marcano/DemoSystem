@@ -157,7 +157,7 @@ public class SalePanel extends javax.swing.JPanel {
         searchMenu.revalidate();
     }
     
-    public final void setVisibleFormClient(boolean visible) {
+    private void setVisibleFormClient(boolean visible) {
         labelClientFullName.setVisible(visible);
         labelClientPhone.setVisible(visible);
         labelClientEmail.setVisible(visible);
@@ -169,12 +169,24 @@ public class SalePanel extends javax.swing.JPanel {
         inputClientFullName.setVisible(visible);
         inputClientPhone.setVisible(visible);
         inputClientEmail.setVisible(visible);
+        
+        panelTabClient.revalidate();
+        panelTabClient.repaint();
     }
     
-    public final void setEnabledFormClient(boolean enable) {
+    private void setEnabledFormClient(boolean enable) {
         inputClientFullName.setEnabled(enable);
         inputClientPhone.setEnabled(enable);
         inputClientEmail.setEnabled(enable);
+    }
+    
+    public void setSaleLabel(BigDecimal products, int porcent) {
+        BigDecimal porcentDecimal = new BigDecimal(porcent);
+        BigDecimal ivaDecimal = products.multiply(porcentDecimal.divide(new BigDecimal(100)));
+        
+        subTotal.setText("<html><body>SubTotal:"+ products.toPlainString() +"$</body></html>");
+        iva.setText("<html><body>IVA ("+ porcent +"%):" + ivaDecimal.toPlainString() + "$</body></html>");
+        total.setText("<html><body>Total:" + ivaDecimal.add(products).toPlainString() + "$</body></html>");
     }
     
     public void validateClientRif() {
@@ -262,6 +274,11 @@ public class SalePanel extends javax.swing.JPanel {
         scrollPane.setViewportView(table);
 
         tabbedPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneStateChanged(evt);
+            }
+        });
 
         panelTabSearch.setBackground(new java.awt.Color(210, 210, 210));
 
@@ -661,7 +678,7 @@ public class SalePanel extends javax.swing.JPanel {
         if(!Character.isDigit(c) || (c == '0' && inputClientRif.getText().isEmpty()))
             evt.consume(); //Bloquea caracteres no numericos y ceros iniciales
         
-        if(client != null) {
+        if(client != null && evt.getKeyChar() != KeyEvent.VK_ENTER) {
             client = null;
             
             setVisibleFormClient(false);
@@ -735,6 +752,18 @@ public class SalePanel extends javax.swing.JPanel {
             validateClientRif();
         }
     }//GEN-LAST:event_selectClientRifItemStateChanged
+
+    private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
+        int selectedIndex = tabbedPane.getSelectedIndex();
+        BigDecimal decimal = new BigDecimal(0);
+        
+        if(selectedIndex == 2) 
+            for(int i=0; i<table.getRowCount(); i++) {
+                decimal = decimal.add(new BigDecimal(table.getModel().getValueAt(i, 3).toString()));
+            }
+        
+        setSaleLabel(decimal, 16);
+    }//GEN-LAST:event_tabbedPaneStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
