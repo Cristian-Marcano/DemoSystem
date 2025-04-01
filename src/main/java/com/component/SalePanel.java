@@ -89,6 +89,11 @@ public class SalePanel extends javax.swing.JPanel {
                 
                 throw new Exception("Not found it Product id");
             }
+            
+            @Override
+            public void onEdited() {
+                calculateTableAmount();
+            }
         };
         
         ItemEvent itemEvent = new ItemEvent() {
@@ -178,6 +183,16 @@ public class SalePanel extends javax.swing.JPanel {
         inputClientFullName.setEnabled(enable);
         inputClientPhone.setEnabled(enable);
         inputClientEmail.setEnabled(enable);
+    }
+    
+    public void calculateTableAmount() {
+        BigDecimal decimal = new BigDecimal(0);
+        
+        for(int i=0; i<table.getRowCount(); i++) {
+            decimal = decimal.add(new BigDecimal(table.getModel().getValueAt(i, 3).toString()));
+        }
+            
+        setSaleLabel(decimal, 16);
     }
     
     public void setSaleLabel(BigDecimal products, int porcent) {
@@ -755,14 +770,10 @@ public class SalePanel extends javax.swing.JPanel {
 
     private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
         int selectedIndex = tabbedPane.getSelectedIndex();
-        BigDecimal decimal = new BigDecimal(0);
         
         if(selectedIndex == 2) 
-            for(int i=0; i<table.getRowCount(); i++) {
-                decimal = decimal.add(new BigDecimal(table.getModel().getValueAt(i, 3).toString()));
-            }
+            calculateTableAmount();
         
-        setSaleLabel(decimal, 16);
     }//GEN-LAST:event_tabbedPaneStateChanged
 
 
