@@ -10,4 +10,5 @@ public interface TableStockEvent {
     
     public BigDecimal stopEditing(int id, int value) throws Exception;
     
+    public void onEdited();
 }
