@@ -25,7 +25,7 @@ public class SaleInvoiceService extends Database {
         Object[] invoice = null;
         if(result.next())
             invoice = new Object[]{new SaleInvoice(result.getInt("si.id"), result.getInt("si.user_account_id"), result.getInt("si.costumer_id"),
-                                                    result.getBigDecimal("si.total"), result.getTimestamp("si.create_at")),
+                                                    result.getBigDecimal("si.total"), result.getBigDecimal("si.tax"), result.getTimestamp("si.create_at")),
                                    new User(result.getInt("ua.id"), result.getString("ua.username"), result.getString("ua.keyword"),
                                             result.getString("ua.position"), result.getBoolean("ua.access")),
                                    new Client(result.getInt("c.id"), result.getString("c.full_name"), result.getString("c.rif"),
@@ -43,7 +43,7 @@ public class SaleInvoiceService extends Database {
         List<Object[]> invoices = new ArrayList<>();
         while(result.next())
             invoices.add(new Object[]{new SaleInvoice(result.getInt("si.id"), result.getInt("si.user_account_id"), result.getInt("si.costumer_id"),
-                                                        result.getBigDecimal("si.total"), result.getTimestamp("si.create_at")),
+                                                        result.getBigDecimal("si.total"), result.getBigDecimal("si.tax"), result.getTimestamp("si.create_at")),
                                       new User(result.getInt("ua.id"), result.getString("ua.username"), result.getString("ua.keyword"),
                                                 result.getString("ua.position"), result.getBoolean("ua.access")),
                                       new Client(result.getInt("c.id"), result.getString("c.full_name"), result.getString("c.rif"),
@@ -66,7 +66,7 @@ public class SaleInvoiceService extends Database {
         List<Object[]> invoices = new ArrayList<>();
         while(result.next())
             invoices.add(new Object[]{new SaleInvoice(result.getInt("si.id"), result.getInt("si.user_account_id"), result.getInt("si.costumer_id"),
-                                                        result.getBigDecimal("si.total"), result.getTimestamp("si.create_at")),
+                                                        result.getBigDecimal("si.total"), result.getBigDecimal("si.tax"), result.getTimestamp("si.create_at")),
                                       new User(result.getInt("ua.id"), result.getString("ua.username"), result.getString("ua.keyword"),
                                                 result.getString("ua.position"), result.getBoolean("ua.access")),
                                       new Client(result.getInt("c.id"), result.getString("c.full_name"), result.getString("c.rif"),
@@ -75,14 +75,15 @@ public class SaleInvoiceService extends Database {
         return invoices;
     }
     
-    public int createSaleInvoice(BigDecimal total, int userId, int clientId) throws SQLException {
-        String sql = "INSERT INTO sale_invoice(total, user_account_id, costumer_id) VALUES (?,?,?)";
+    public int createSaleInvoice(BigDecimal total, BigDecimal tax, int userId, int clientId) throws SQLException {
+        String sql = "INSERT INTO sale_invoice(total, tax, user_account_id, costumer_id) VALUES (?,?,?,?)";
         if(connection.isClosed()) applyConnection();
         if(connection.getAutoCommit()) connection.setAutoCommit(false);
         statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         statement.setBigDecimal(1, total);
-        statement.setInt(2, userId);
-        statement.setInt(3, clientId);
+        statement.setBigDecimal(2, tax);
+        statement.setInt(3, userId);
+        statement.setInt(4, clientId);
         statement.executeUpdate();
         result = statement.getGeneratedKeys();
         result.next();
@@ -91,14 +92,15 @@ public class SaleInvoiceService extends Database {
     }
     
     public void updateSaleInvoice(SaleInvoice invoice) throws SQLException {
-        String sql = "UPDATE sale_invoice SET total = ?, user_account_id = ?, costumer_id = ?, create_at = ? WHERE id = ?";
+        String sql = "UPDATE sale_invoice SET total = ?, tax = ? user_account_id = ?, costumer_id = ?, create_at = ? WHERE id = ?";
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setBigDecimal(1, invoice.getTotal());
-        statement.setInt(2, invoice.getUserId());
-        statement.setInt(3, invoice.getClientId());
-        statement.setTimestamp(4, invoice.getCreateAt());
-        statement.setInt(5, invoice.getId());
+        statement.setBigDecimal(2, invoice.getTax());
+        statement.setInt(3, invoice.getUserId());
+        statement.setInt(4, invoice.getClientId());
+        statement.setTimestamp(5, invoice.getCreateAt());
+        statement.setInt(6, invoice.getId());
         statement.executeUpdate();
         closeConnection();
     }
