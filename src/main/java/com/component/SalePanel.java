@@ -1,5 +1,6 @@
 package com.component;
 
+import com.demo.Demo;
 import com.event.ItemEvent;
 import com.model.Product;
 import com.ui.TableStockCellEditor;
@@ -8,13 +9,17 @@ import com.ui.TableActionCellRender;
 import com.event.TableActionEvent;
 import com.event.TableStockEvent;
 import com.model.Client;
+import com.model.Sale;
 import com.service.ClientService;
 import com.service.ProductService;
+import com.service.SaleInvoiceService;
+import com.service.SaleService;
 import com.util.ValidateInput;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,8 +41,10 @@ public class SalePanel extends javax.swing.JPanel {
     private List<Product> listProductOnTable = new ArrayList<>();
     private Set<Product> selectedProducts = new HashSet<>();
     private List<Object[]> listProducts = new ArrayList<>();
+    private BigDecimal tax, totalDecimal;
     
     public Product productSelected;
+    
     
     /**
      * Creates new form SalePanel
@@ -73,6 +80,8 @@ public class SalePanel extends javax.swing.JPanel {
                 selectedProducts.remove(productRemove);
                 
                 validateSelectedProducts();
+                
+                calculateTableAmount();
             }
         };
         
@@ -81,7 +90,7 @@ public class SalePanel extends javax.swing.JPanel {
             public BigDecimal stopEditing(int id, int value) throws Exception {
                 for(Product product: listProductOnTable) {
                     if(product.getId() == id && product.getAvailability() >= value) {
-                        return product.getPrice(); 
+                        return product.getPrice();
                     } else if(product.getId() == id) {
                         throw new Exception("Stock not availability");
                     }
@@ -199,9 +208,16 @@ public class SalePanel extends javax.swing.JPanel {
         BigDecimal porcentDecimal = new BigDecimal(porcent);
         BigDecimal ivaDecimal = products.multiply(porcentDecimal.divide(new BigDecimal(100)));
         
+        totalDecimal = ivaDecimal.add(products).setScale(2, RoundingMode.HALF_UP);
+        
         subTotal.setText("<html><body>SubTotal:"+ products.toPlainString() +"$</body></html>");
         iva.setText("<html><body>IVA ("+ porcent +"%):" + ivaDecimal.toPlainString() + "$</body></html>");
-        total.setText("<html><body>Total:" + ivaDecimal.add(products).toPlainString() + "$</body></html>");
+        total.setText("<html><body>Total:" + totalDecimal.toPlainString() + "$</body></html>");
+        
+        tax = ivaDecimal.setScale(2, RoundingMode.HALF_UP);
+        
+        if(products.intValue() > 0) btnSale.setVisible(true);
+        else btnSale.setVisible(false);
     }
     
     public void validateClientRif() {
@@ -593,6 +609,11 @@ public class SalePanel extends javax.swing.JPanel {
         btnSale.setText("Registrar Venta");
         btnSale.setBorder(null);
         btnSale.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaleActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelTabSaleLayout = new javax.swing.GroupLayout(panelTabSale);
         panelTabSale.setLayout(panelTabSaleLayout);
@@ -747,6 +768,8 @@ public class SalePanel extends javax.swing.JPanel {
             
             int id = clientService.createClient(fullName, rif, phone, email);
             
+            setEnabledFormClient(false);
+            
             client = new Client(id, fullName, rif, email, phone);
         } catch(SQLException e) {
             System.err.println(e.getMessage());
@@ -775,6 +798,40 @@ public class SalePanel extends javax.swing.JPanel {
             calculateTableAmount();
         
     }//GEN-LAST:event_tabbedPaneStateChanged
+
+    private void btnSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaleActionPerformed
+        if(client != null) {
+            SaleInvoiceService saleInvoiceService = new SaleInvoiceService();
+            
+            try {
+                int saleInvoiceId = saleInvoiceService.createSaleInvoice(totalDecimal, tax, Demo.user.getId(), client.getId());
+                
+                System.out.println("create Invoice -> " + saleInvoiceId);
+                
+                List<Sale> listTable = new ArrayList<>();
+                
+                for(int i=0; i<table.getRowCount(); i++)
+                    listTable.add(new Sale(0, saleInvoiceId,
+                                            Integer.parseInt(table.getModel().getValueAt(i, 0).toString()),
+                                            Integer.parseInt(table.getModel().getValueAt(i, 2).toString()),
+                                            new BigDecimal(table.getModel().getValueAt(i, 3).toString())));
+                
+                System.out.println("finish forEach table");
+                
+                SaleService saleService = new SaleService();
+                saleService.createSales(listTable);
+            } catch(SQLException e) {
+                
+                try {
+                    saleInvoiceService.applyRollBack();
+                } catch(SQLException sqlE) { System.err.println("Failed RollBack ???"); }
+                
+                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } else tabbedPane.setSelectedIndex(1);
+    }//GEN-LAST:event_btnSaleActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
