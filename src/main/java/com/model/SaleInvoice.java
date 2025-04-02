@@ -10,20 +10,25 @@ import java.sql.Timestamp;
 public class SaleInvoice {
     
     private int id, userId, clientId;
-    private BigDecimal total;
+    private BigDecimal total, tax;
     private Timestamp createAt;
     
-    public SaleInvoice(int id, int userId, int clientId, BigDecimal total, Timestamp createAt) {
+    public SaleInvoice(int id, int userId, int clientId, BigDecimal total, BigDecimal tax, Timestamp createAt) {
         this.id = id;
         this.userId = userId;
         this.clientId = clientId;
         this.total = total;
+        this.tax = tax;
         this.createAt = createAt;
     }
     
     //* Setters
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+    
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
     }
     
     public void setCreateAt(Timestamp createAt) {
@@ -45,6 +50,10 @@ public class SaleInvoice {
     
     public BigDecimal getTotal() {
         return total;
+    }
+    
+    public BigDecimal getTax() {
+        return tax;
     }
     
     public Timestamp getCreateAt() {
