@@ -11,8 +11,19 @@ import javax.swing.JPanel;
 /**
  *
  * @author Cristian
+ * Clase que contiene los componente visuales de la app
+ * despues de haberse logeado
  */
 public class Background extends javax.swing.JPanel {
+    
+    /**
+     * Objetos que ayudan a la integracion de componentes visuales a esta interfaz visual
+     * 
+     * panelHeader: componente cabecera que contiene el logo, nombre y rol del usuario
+     * board: objeto que auxilia la integracion de paneles al dashboard
+     * headerP: objeto que coopera  en la integracion de paneles al header
+     * contentP: objeto que ayuda la integracion de paneles al content
+     */
     
     public Header panelHeader;
     public ShowJPanel board, headerP, contentP;
@@ -29,6 +40,9 @@ public class Background extends javax.swing.JPanel {
         contentP = initPanel(new SalePanel(), content, new Dimension(content.getPreferredSize()));
     }
     
+    //* Instanciacion del objeto ShowJPanel, pasando por parametros el panel que sera mostrado,
+    //* el panel contenedor que se encuentra en esta clase,
+    //* y el tamaña que ocupara el panel
     private ShowJPanel initPanel(JPanel panel, JPanel container, Dimension size) {
         ShowJPanel show = new ShowJPanel(panel, container, size);
         show.showPanel();
@@ -116,7 +130,8 @@ public class Background extends javax.swing.JPanel {
                 .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //* Reescalamiento del dashboard, para cuando aumente de tamaño la ventana
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         int width = this.getWidth() / 4;
         
@@ -125,8 +140,8 @@ public class Background extends javax.swing.JPanel {
         else 
             dashboard.setPreferredSize(new Dimension(dashboard.getMinimumSize().width, this.getHeight()));
         
-        repaint();
         revalidate();
+        repaint();
     }//GEN-LAST:event_formComponentResized
 
 

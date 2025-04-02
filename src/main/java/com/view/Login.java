@@ -20,8 +20,19 @@ import javax.swing.JPanel;
 /**
  *
  * @author Cristian
+ * Clase del panel que se encarga de autentificar si el usuario
+ * esta registrado en la base de datos o de registrar el admin del aplicación por primera vez
  */
 public class Login extends javax.swing.JPanel {
+    
+    /**
+     * Objetos que ayudan la integracion de componentes, eventos a esta interfaz visual
+     * 
+     * panelFormLogin: formulario que ayuda en el inicio de sesión de usuario
+     * panelFormSignUp: formularion que auxilia en la registracion del primer usuario de la aplicacion (admin)
+     * panelFormForgot: formularion que coopera en la validacion de datos del usuario en caso de que se le olvido la contraseña
+     * authEvent: funciones de eventos que se ejecutan cuando pasa cierta condición, en este caso el inicio de sesion, el registro y en el forgot
+     */
     
     public PanelFormLogin panelFormLogin;
     public PanelFormSignUp panelFormSignUp;
@@ -35,7 +46,7 @@ public class Login extends javax.swing.JPanel {
         initComponents();
         
         authEvent = new FormAuthEvent() {
-            @Override
+            @Override //* Funcion que se encarga de validar si el usuario se encuentra en la base de datos y confirmando su contraseña son identicas
             public void onLogin(String username, String password) throws Exception {
                 try {
                     UserService userService = new UserService();
@@ -56,7 +67,7 @@ public class Login extends javax.swing.JPanel {
                 }
             }
 
-            @Override
+            @Override //* Funcion que se encarga de registrar un nuevo usuario a la app en este caso el admin
             public void onSignUp(String username, String password, String firstName, String lastName, String ci, String phone) {
                 UserService userService = new UserService();
                 UserInfoService userInfoService = new UserInfoService();
@@ -78,7 +89,7 @@ public class Login extends javax.swing.JPanel {
                 }
             }
 
-            @Override
+            @Override //* Funcion que se encarga de validar los datos del usuario sin la contraseña
             public void onForgot(String username, String firstName, String lastName, String ci) throws Exception {
                 try {
                     UserService userService = new UserService();
@@ -105,6 +116,7 @@ public class Login extends javax.swing.JPanel {
         };
     }
     
+    //* Funcion que se dirije a la ventana de la app para usar la funcionalidad de cambiar a la interfaz visual de background
     public void initBackground() {
         Component comp = this.getParent();
         
@@ -117,11 +129,13 @@ public class Login extends javax.swing.JPanel {
         }
     }
     
+    //* Instanciar formulario Registro para mostrarlo en la pantalla
     public void initFormSignUp() {
         panelFormSignUp = new PanelFormSignUp(authEvent);
         setPanelForm(panelFormSignUp);
     }
     
+    //* Intanciar formulario inicio de sesion para mostrarlo en la pantalla
     public void initFormLogin() {
         panelFormLogin = new PanelFormLogin(authEvent);
         setPanelForm(panelFormLogin);
@@ -133,6 +147,7 @@ public class Login extends javax.swing.JPanel {
         });
     }
     
+    //* Instanciar formularion forgot
     public void initFormForgot() {
         panelFormForgot = new PanelFormForgot(authEvent);
         setPanelForm(panelFormForgot);
@@ -144,6 +159,7 @@ public class Login extends javax.swing.JPanel {
         });
     }
     
+    //* Funcion que se encarga de cambiar los formularios dependiendo del que se le pase por parametro
     private void setPanelForm(JPanel content) {
         content.setSize(content.getPreferredSize());
         panelForm.removeAll();
