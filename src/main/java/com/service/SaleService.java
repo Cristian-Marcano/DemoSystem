@@ -10,7 +10,7 @@ import java.util.List;
 /**
  *
  * @author Cristian
- * Clase que realiza operaciones a la tabla product en la DB
+ * Clase que realiza operaciones a la tabla sale en la DB
  * de MySQL 
  */
 public class SaleService extends Database {

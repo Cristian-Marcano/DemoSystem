@@ -13,9 +13,12 @@ import java.util.List;
 /**
  *
  * @author Cristian
+ * Clase que realiza operaciones a la tabla sale_invoice en la DB
+ * de MySQL 
  */
 public class SaleInvoiceService extends Database {
     
+    //* Obtener factura por su id
     public Object[] getSaleInvoice(int id) throws SQLException {
         String sql = "SELECT * FROM sale_invoice AS si JOIN user_account AS ua ON si.user_account_id = ua.id JOIN costumer AS c ON si.costumer_id = c.id WHERE id = ?";
         applyConnection();
@@ -34,6 +37,7 @@ public class SaleInvoiceService extends Database {
         return invoice;
     }
     
+    //* Obtener facturas
     public List<Object[]> getSalesInvoices() throws SQLException {
         String sql = "SELECT * FROM sale_invoice AS si JOIN user_account AS ua ON si.user_account_id = ua.id "
                 + "JOIN costumer AS c ON si.costumer_id = c.id ORDER si.id DESC";
@@ -52,6 +56,7 @@ public class SaleInvoiceService extends Database {
         return invoices;
     }
     
+    //* Buscar facturas por su distintos tipos de datos, createAt, total, tax, etc
     public List<Object[]> searchSalesInvoices(List<String[]> sentencesAndValues) throws SQLException {
         String sql = "SELECT * FROM sale_invoice AS si JOIN user_account AS ua ON si.user_account_id = ua.id JOIN costumer AS c ON si.costumer_id = c.id";
         if(!sentencesAndValues.isEmpty()) {
@@ -75,6 +80,7 @@ public class SaleInvoiceService extends Database {
         return invoices;
     }
     
+    //* Crear factura de venta
     public int createSaleInvoice(BigDecimal total, BigDecimal tax, int userId, int clientId) throws SQLException {
         String sql = "INSERT INTO sale_invoice(total, tax, user_account_id, costumer_id) VALUES (?,?,?,?)";
         if(connection.isClosed()) applyConnection();
@@ -91,6 +97,7 @@ public class SaleInvoiceService extends Database {
         return id;
     }
     
+    //* Editar factura de venta
     public void updateSaleInvoice(SaleInvoice invoice) throws SQLException {
         String sql = "UPDATE sale_invoice SET total = ?, tax = ? user_account_id = ?, costumer_id = ?, create_at = ? WHERE id = ?";
         applyConnection();
@@ -105,6 +112,7 @@ public class SaleInvoiceService extends Database {
         closeConnection();
     }
     
+    //* Remover factura de venta ¡SOLO APLICA SI LAS VENTAS DE LA FACTURA FUERON REMOVIDAS!
     public void removeSaleInvoice(int id) throws SQLException {
         String sql = "DELETE * FROM sale_invoice WHERE id = ?";
         applyConnection();
