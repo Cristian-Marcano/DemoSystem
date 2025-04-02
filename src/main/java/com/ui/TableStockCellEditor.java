@@ -56,7 +56,12 @@ public class TableStockCellEditor extends DefaultCellEditor {
                 int idProduct = (int) table.getValueAt(row, 0); //* La primera columna SIEMPRE contendra el Id
                 BigDecimal price = stockEvent.stopEditing(idProduct, value);
                 table.setValueAt(price.multiply(new BigDecimal(value)), row, columnAmount);
-                return super.stopCellEditing();
+                
+                boolean edited = super.stopCellEditing();
+                
+                if(edited) stockEvent.onEdited();
+                
+                return edited;
             }
         } catch(NumberFormatException ignored) {
             System.err.println("No se permite datos no numericos");
