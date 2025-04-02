@@ -12,8 +12,18 @@ import javax.swing.JPanel;
 /**
  *
  * @author Cristian
+ * Clase principal que donde se ejecuta la ventana del programa
+ * y confirma si los demas modulos/ paquetes estan listos
  */
 public class Demo extends javax.swing.JFrame {
+    
+    /** 
+     * Objetos que ayudan la integracion de interfaces visuales a la ventana y datos para el uso general de la aplicacion
+     * 
+     * login: panel que ayuda a la integracion como el formulario del login, signup y forgot
+     * background: panel que ayuda la integracion de componentes como SalePanel, Header, MenuBar, etc.
+     * user: objeto que almacena los datos del usario al iniciar sesion
+     */
     
     public static Login login;
     public static Background background;
@@ -39,16 +49,19 @@ public class Demo extends javax.swing.JFrame {
         
     }
     
+    //* Cambia la vista de la ventana al Background
     public void goToBackgroundView() {
         background = new Background();
         setView(background);
     }
     
+    //* Cambia la vista de la ventana al Login
     public void goToLoginView() {
         login = new Login();
         setView(login);
     }
     
+    //* Cambia la vista de la ventana por cualquier panel que se le pase por paramatro
     private void setView(JPanel view) {
         setContentPane(view);
         repaint();
@@ -110,7 +123,8 @@ public class Demo extends javax.swing.JFrame {
         }
         */
         //</editor-fold>
-
+        
+        //* Si no encuentra los controladeres de la base de datos, cierra el programa
         if(!Database.verifyController()) {
             JOptionPane.showMessageDialog(null,"Conector de Base de Datos, No encontrado","Alerta",JOptionPane.ERROR_MESSAGE);
             System.exit(1);
