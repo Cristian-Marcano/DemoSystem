@@ -9,9 +9,15 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Cristian
+ * Clase de componente visual que se encarga de mostrar
+ * los inputs del formulario de forgot
  */
 public class PanelFormForgot extends javax.swing.JPanel {
 
+    /**
+     * authEvent: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos
+     */
+    
     private FormAuthEvent authEvent;
     
     /**
@@ -22,6 +28,7 @@ public class PanelFormForgot extends javax.swing.JPanel {
         this.authEvent = authEvent;
     }
     
+    //* Añade un ActionEvent al btnBack para cambiar de componente a PanelFormLogin
     public void addEventBackLogin(ActionListener event) {
         btnBack.addActionListener(event);
     }
@@ -196,7 +203,7 @@ public class PanelFormForgot extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    //* Valida y extrae el texto de los inputs para ejecutar el evento de forgot de authEvent
     private void btnInitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInitActionPerformed
         try {
             ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputFirstName, inputLastName, inputCI));

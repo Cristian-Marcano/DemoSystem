@@ -10,10 +10,19 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Cristian
+ * Clase de componente visual que se encarga de mostrar
+ * los inputs del formulario de login
  */
 public class PanelFormLogin extends javax.swing.JPanel {
     
-    private boolean hide = false;
+    /**
+     * Atributos que facilitan la funcionalidad y logica del componente
+     * 
+     * show: dato que valida si mostrar el texto del inputPassword, cuando iconShowAndHidden es presionado
+     * authEvent: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos
+     */
+    
+    private boolean show = false;
     private FormAuthEvent authEvent;
     
     /**
@@ -24,6 +33,7 @@ public class PanelFormLogin extends javax.swing.JPanel {
         this.authEvent = authEvent;
     }
     
+    //* Añade un ActionEvent al btnForgotPassword para cambiar de componente a PanelFormForgot
     public void addEventForgotPassword(ActionListener event) {
         btnFotgotPassword.addActionListener(event);
     }
@@ -173,7 +183,7 @@ public class PanelFormLogin extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    //* Valida y extrae el texto de los inputs para ejecutar el evento de login de authEvent
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         try {
             ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputPassword));
@@ -188,9 +198,10 @@ public class PanelFormLogin extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    //* Cambia la legibilidad del texto que se encuentra en el inputPassword presionando el iconShowAndHidden
     private void iconShowAndHiddenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconShowAndHiddenMouseClicked
-        hide = !hide;
-        if(hide) {
+        show = !show;
+        if(show) {
             inputPassword.setEchoChar((char) 0);
             iconShowAndHidden.setIcon(new ImageIcon(getClass().getResource("/closed-eye.png")));
         } else {
