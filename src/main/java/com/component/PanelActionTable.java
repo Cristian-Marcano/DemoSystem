@@ -7,21 +7,24 @@ import java.awt.event.ActionListener;
 /**
  *
  * @author Cristian
+ * Clase componente que muestra 2 o un ActionButton
+ * dentro de una casilla de un JTable
  */
 public class PanelActionTable extends javax.swing.JPanel {
 
     /**
      * Creates new form PanelActionTable
-     *  @param onlyBtn: parametro que indica si solo va estar visible el btnDelete o todos los demas btn
      */
     public PanelActionTable() {
         initComponents();
     }
     
+    //* Hacer visible unicamente al btn remove
     public void onlyRemoveBtn(boolean onlyBtn) {
         btnActionEdit.setVisible(!onlyBtn);
     }
     
+    //* Inicia los eventos para cada btn cuando estos sean presionados
     public void initEvent(TableActionEvent event, int row) {
         btnActionEdit.addActionListener(new ActionListener() {
             @Override

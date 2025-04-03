@@ -9,14 +9,27 @@ import javax.swing.ImageIcon;
 /**
  *
  * @author Cristian
+ * Clase componente que contendra los datos de un item
+ * (producto) que se este buscando en el inputSearch
  */
 public class SearchItem extends javax.swing.JPanel {
 
+    /**
+     * Atributos que mejoran la visualizacion y funcionalidad del componente
+     * 
+     * normal: color del item cuando el mouse no esta encima de este
+     * hover: color del item cuando el mouse esta encima de este
+     * eventClick: variable que contiene una funcion que se ejecuta cuando el item es clickeado
+     */
+    
     public final Color normal = new Color(230,230,230), hover = new Color(210,210,210);
     private ActionListener eventClick;
     
     /**
      * Creates new form SearchItem
+     * 
+     * @param product: datos del producto que se esta mostrando en el componente
+     * @param selected: validacion de si el producto ya se encuentra en el listado de productos ya escogidos
      */
     public SearchItem(Product product, boolean selected) {
         initComponents();
@@ -27,6 +40,7 @@ public class SearchItem extends javax.swing.JPanel {
             iconSearch.setIcon(new ImageIcon(getClass().getResource("/history.png")));
     }
 
+    //* Añade el ActionEvent para cuando el item sea clickeado
     public void addEvent(ActionListener eventClick) { 
         this.eventClick = eventClick;
     }
@@ -89,15 +103,18 @@ public class SearchItem extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //* Cambiar el color del background si el mouse esta por encima
     private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
         setBackground(hover);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_formMouseEntered
-
+    
+    //* Cambiar el color del background si el mouse esta por encima
     private void formMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseExited
         setBackground(normal);
     }//GEN-LAST:event_formMouseExited
-
+    
+    //* Ejecutar la funcion del eventClick por que el Item fue clickedo
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         eventClick.actionPerformed(null);
     }//GEN-LAST:event_formMouseClicked

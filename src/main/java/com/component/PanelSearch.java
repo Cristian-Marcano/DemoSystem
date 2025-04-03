@@ -11,9 +11,15 @@ import net.miginfocom.swing.MigLayout;
 /**
  *
  * @author Cristian
+ * Clase de componente que contendra otros componentes que son
+ * los items de busqueda (SearchItem)
  */
 public class PanelSearch extends javax.swing.JPanel {
 
+    /**
+     * itemEvent: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos
+     */
+    
     private ItemEvent itemEvent;
     
     /**
@@ -24,10 +30,12 @@ public class PanelSearch extends javax.swing.JPanel {
         searchContent.setLayout(new MigLayout("fillx", "0[]0", "0[]0"));
     }
     
+    //* Añade el itemEvent a esta clase para ser usado con los items
     public void addItemEvent(ItemEvent itemEvent) {
         this.itemEvent = itemEvent;
     }
     
+    //* Cambia la lista de Productos semejantes a la busqueda
     public void setListProductSearch(List<Object[]> listProductAndSelected) {
         searchContent.removeAll();
         
@@ -35,7 +43,8 @@ public class PanelSearch extends javax.swing.JPanel {
             SearchItem item = new SearchItem((Product) data[0], (boolean) data[1]);
             
             item.addEvent(new ActionListener() {
-                @Override
+                
+                @Override //* Cuando un item es Clickeado se le activa el evento
                 public void actionPerformed(ActionEvent ae) {
                     itemEvent.onClick((Product) data[0]);
                 }
@@ -44,6 +53,7 @@ public class PanelSearch extends javax.swing.JPanel {
             searchContent.add(item, "wrap");
         }
         
+        // Cambiar el tamaño del panel de acuerdo a la cantidad de items que se este mostrando
         int count = getItemSize();
         
         if(count <= 5) {
@@ -56,6 +66,7 @@ public class PanelSearch extends javax.swing.JPanel {
         revalidate();
     }
     
+    //* Obtener la cantidad de items que se encuentran en el componente
     public int getItemSize() {
         return searchContent.getComponentCount();
     }

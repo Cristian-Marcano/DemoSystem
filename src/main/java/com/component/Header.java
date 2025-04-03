@@ -10,9 +10,21 @@ import java.awt.RenderingHints;
 /**
  *
  * @author Cristian
+ * Clase componente que dibuja el logo y muestra los datos
+ * del usuario logeado
  */
 public class Header extends javax.swing.JPanel {
 
+    /**
+     * Atributos que facilitan el renderizado del componente
+     * 
+     * xArc: ejeX del punto de inicio del dibujo del arco del header
+     * yArc: ejeY del punto de inicio del dibujo del arco del header
+     * widthArc: anchura de la arco (solo se muestra la mitad)
+     * heightArc: altura de la arco (solo se muestra la mitad)
+     * arcAngle: angulo de inicio que terminara el dibujado del arco
+     */
+    
     public int xArc, yArc, widthArc, heightArc = 60, arcAngle = 90;
     
     /**
@@ -21,15 +33,14 @@ public class Header extends javax.swing.JPanel {
     public Header() {
         initComponents();
     }
-    /**
-     * @param user: objeto que almacena el username y position del header
-     */
+    
+    //* Cambiar la informacion del usuario logeado en la cabecera
     public void setUserInfo(User user) {
         username.setText(user.getUsername());
         position.setText(user.getPosition());
     }
     
-    @Override
+    @Override //* Dibuja|Renderiza el componente
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
