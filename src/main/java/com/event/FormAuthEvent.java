@@ -3,6 +3,7 @@ package com.event;
 /**
  *
  * @author Cristian
+ * Interface de eventos de autenticacion
  */
 public interface FormAuthEvent {
     

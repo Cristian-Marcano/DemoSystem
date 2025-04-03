@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 /**
  *
  * @author Cristian
+ * Interface de eventos de la edicion de cualquier casilla
+ * de la columna de cantidad de la tabla del PanelSale
  */
 public interface TableStockEvent {
     
