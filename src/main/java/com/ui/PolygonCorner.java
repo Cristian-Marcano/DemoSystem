@@ -8,9 +8,14 @@ import java.util.List;
 /**
  *
  * @author Cristian
+ * Clase que se usa para dibujar los bordes redondos de la flecha
+ * del ScrollBarWin11UI
  */
 public class PolygonCorner {
 
+    // GeneralPath: es un dato que puede crear y manipular figuras geometricas
+    
+    //* Genera un GenaralPath con las esquinas redondeadas a partir de una lista de puntos y tamaño del redondeo
     public GeneralPath getRoundedGeneralPathFromPoints(List<Point2D> l, float arcSize) {
         l.add(l.get(0));
         l.add(l.get(1));
@@ -29,6 +34,7 @@ public class PolygonCorner {
         return p;
     }
 
+    //* Calcula un punto de desplazo desde el p2 hacia p1, por una distancia proporcional a arcSize
     private Point2D calculatePoint(Point2D p1, Point2D p2, float arcSize) {
         double d1 = Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2f) + Math.pow(p1.getY() - p2.getY(), 2f));
         double per = arcSize / d1;

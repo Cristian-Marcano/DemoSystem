@@ -26,6 +26,7 @@ import org.jdesktop.animation.timing.TimingTargetAdapter;
 /**
  *
  * @author Cristian
+ * Clase que mejora la UI del Scroll siendo semejante al Scroll de Windows 11
  */
 public class ScrollBarWin11UI extends BasicScrollBarUI {
 
