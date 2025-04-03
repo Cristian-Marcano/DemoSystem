@@ -1,4 +1,4 @@
-package com.ui;
+package com.ux;
 
 import com.event.TableStockEvent;
 import java.awt.Component;
@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 public class TableStockCellEditor extends DefaultCellEditor {
     
     /**
-     *  Atributos que facilitan el calculo del importe de un producto de la fila de la tabla
+     * Atributos que facilitan el calculo del importe de un producto de la fila de la tabla
      * 
      * columnAmount: dato que identifica la columna que contendra los importe de los productos
      * table: objeto que referencia la tabla en cuestion que se esta usando
