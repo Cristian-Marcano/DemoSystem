@@ -8,8 +8,13 @@ import javax.swing.JPanel;
 /**
  *
  * @author Cristian
+ * Clase complementaria de un panel que solo le añade bordeado mas redondeado
  */
 public class PanelBorderRounded extends JPanel {
+    
+    /**
+     * radius: dato que contiene que tan redondeado debe de ser el borde del panel
+     */
     
     private int radius = 0;
     
@@ -20,7 +25,7 @@ public class PanelBorderRounded extends JPanel {
         setOpaque(false);
     }
     
-    @Override
+    @Override //* Pinta o renderiza el componente con su redondeado
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs);
         

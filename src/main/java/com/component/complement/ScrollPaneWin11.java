@@ -12,6 +12,8 @@ import javax.swing.ScrollPaneLayout;
 /**
  *
  * @author Cristian
+ * Clase complementaria que mejora la UI del ScrollPane,
+ * añadiendole el ScrollBarWin11UI
  */
 public class ScrollPaneWin11 extends JScrollPane {
 

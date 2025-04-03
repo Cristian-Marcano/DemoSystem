@@ -11,8 +11,16 @@ import javax.swing.border.EmptyBorder;
 /**
  *
  * @author Cristian
+ * Clase complementario de un btn que solo le añade bordeado mas redondeado
  */
 public class ActionButton extends JButton {
+    
+    /**
+     * Atributos que mejoran la UI del elemeto
+     * 
+     * radius: dato que almacena que tan redondeado debe de ser el borde del btn
+     * mousePress: variable que cambia cambia cada vez que el mouse es presionado o no para oscurecer o no su background
+     */
     
     private int radius = 0;
     private boolean mousePress;
@@ -26,6 +34,7 @@ public class ActionButton extends JButton {
         initActionButton();
     }
     
+    //* Instancia la clase
     private void initActionButton() {
         setContentAreaFilled(false);
         setBorder(new EmptyBorder(3, 3, 3, 3));
@@ -42,7 +51,7 @@ public class ActionButton extends JButton {
         });
     }
 
-    @Override
+    @Override //* Pinta o renderiza el boton con su redondeado y background 
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

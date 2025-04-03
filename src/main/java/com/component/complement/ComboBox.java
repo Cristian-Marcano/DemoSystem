@@ -33,26 +33,10 @@ import org.jdesktop.animation.timing.TimingTargetAdapter;
 /**
  *
  * @author Cristian
+ * Clase complementaria que mejora la UI de un JComboBox
  */
 public class ComboBox<E> extends JComboBox<E> {
-
-    public String getLabeText() {
-        return labeText;
-    }
-
-    public void setLabeText(String labeText) {
-        this.labeText = labeText;
-    }
-
-    public Color getLineColor() {
-        return lineColor;
-    }
-
-    public void setLineColor(Color lineColor) {
-        this.lineColor = lineColor;
-    }
-
-    private String labeText = "Label";
+    
     private Color lineColor = new Color(3, 155, 216);
     private boolean mouseOver;
 
@@ -82,6 +66,14 @@ public class ComboBox<E> extends JComboBox<E> {
         setBackground(new Color(180,180,180));
         setBorder(new EmptyBorder(15, 3, 5, 3));
         installUI();
+    }
+    
+    public Color getLineColor() {
+        return lineColor;
+    }
+
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
     }
 
     private class ComboUI extends BasicComboBoxUI {

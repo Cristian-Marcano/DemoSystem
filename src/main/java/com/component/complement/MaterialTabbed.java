@@ -23,6 +23,7 @@ import org.jdesktop.animation.timing.interpolation.PropertySetter;
 /**
  *
  * @author Cristian
+ * Clase complementaria que mejora la UI de un JTabbedPane
  */
 public class MaterialTabbed extends JTabbedPane {
 
