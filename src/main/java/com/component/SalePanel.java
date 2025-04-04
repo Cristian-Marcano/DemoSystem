@@ -3,7 +3,7 @@ package com.component;
 import com.demo.Demo;
 import com.event.ItemEvent;
 import com.model.Product;
-import com.ui.TableStockCellEditor;
+import com.ux.TableStockCellEditor;
 import com.ui.TableActionCellEditor;
 import com.ui.TableActionCellRender;
 import com.event.TableActionEvent;
@@ -32,8 +32,27 @@ import javax.swing.JPopupMenu;
 /**
  *
  * @author Cristian
+ * Clase componente que se encarga de la busqueda de productos,
+ * registro y busqueda de clientes, para asi registrar la venta del cliente
  */
 public class SalePanel extends javax.swing.JPanel {
+    
+    /**
+     * Atributos que auxilian la funcionalidad y la logica de la clase
+     * 
+     * client: objeto que contiene los datos del cliente que va realizar la compra
+     * searchMenu: componente swing que permite mostrar y ocultar otros componentes con facilidad
+     * panelSearch: componente que contendra las busquedas encontradas gracias al inputSearch y encontrara dentro del searchMenu
+     * listProductOnTable: listado de productos que se encuentran en la tabla, se usa de intermediario 
+     *                      solo para eliminar el registro de productos seleccionados
+     * selectedProducts: almacena los productos seleccionados, se usa en caso de que se siga usando el buscador y muestre
+     *                      que ciertos productos ya estan seleccionados
+     * listProducts: listado de productos que arroja la base de datos al usar el inputSearch, mas con un booleano (true si ya esta seleccionado)
+     *                  (false si no lo esta)
+     * tax: monto de impuestos de la venta
+     * totalDecimal: monto total de la venta
+     * productSelected: producto seleccionado y mostrado con sus datos completos despues de haber sido clickeado en el panelSearch
+     */
     
     private Client client = null;
     private JPopupMenu searchMenu;
@@ -52,6 +71,7 @@ public class SalePanel extends javax.swing.JPanel {
     public SalePanel() {
         initComponents();
         
+        //* Cambia de lugar la flecha del JComboBox a la izquierda
         selectClientRif.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         
         setVisibleFormClient(false);
@@ -59,7 +79,7 @@ public class SalePanel extends javax.swing.JPanel {
         btnAddClient.setVisible(false);
         
         searchMenu = new JPopupMenu();
-        searchMenu.setFocusable(false);
+        searchMenu.setFocusable(false); // No es focusable para cuando cambia de valores no desenfoque el inputSearch
         panelSearch = new PanelSearch();
         searchMenu.add(panelSearch);
         
@@ -67,7 +87,7 @@ public class SalePanel extends javax.swing.JPanel {
             @Override
             public void onEdit(int row) { }
 
-            @Override
+            @Override //* Obtiene la fila que se presiono el btn (btnActionRemove) y la elimina de la tabla 
             public void onRemove(int row) {
                 if (table.isEditing()) {
                     table.getCellEditor().stopCellEditing();
@@ -75,9 +95,10 @@ public class SalePanel extends javax.swing.JPanel {
                 DefaultTableModel model = (DefaultTableModel) table.getModel();
                 model.removeRow(row);
                 
-                Product productRemove = listProductOnTable.get(row);
+                Product productRemove = listProductOnTable.get(row); //* Obtiene el producto por la fila de la tabla
+                listProductOnTable.remove(row); //* Elimina el producto del listado
                 
-                selectedProducts.remove(productRemove);
+                selectedProducts.remove(productRemove); //* Elimina el producto del set de productos seleccionados
                 
                 validateSelectedProducts();
                 
@@ -86,12 +107,14 @@ public class SalePanel extends javax.swing.JPanel {
         };
         
         TableStockEvent stockEvent = new TableStockEvent() {
-            @Override
+            
+            @Override //* Obtiene el id del producto y la cantidad del que se desea vender, para calcular el importe
             public BigDecimal stopEditing(int id, int value) throws Exception {
                 for(Product product: listProductOnTable) {
-                    if(product.getId() == id && product.getAvailability() >= value) {
+                    // Se busca el producto y valida que la cantidad deseada se encuentre en lo disponible
+                    if(product.getId() == id && product.getAvailability() >= value) { 
                         return product.getPrice();
-                    } else if(product.getId() == id) {
+                    } else if(product.getId() == id) { // Si la cantidad deseada supera a la cantidad disponible
                         throw new Exception("Stock not availability");
                     }
                 }
@@ -99,14 +122,15 @@ public class SalePanel extends javax.swing.JPanel {
                 throw new Exception("Not found it Product id");
             }
             
-            @Override
+            @Override //* Cada vez que se termine de editar la cantidad, se calcula el importe de toda la tabla
             public void onEdited() {
                 calculateTableAmount();
             }
         };
         
         ItemEvent itemEvent = new ItemEvent() {
-            @Override
+            
+            @Override //* Se muestra la informacion del producto clickeado del panelSearch
             public void onClick(Product product) {
                 panelProductSelected.setVisible(true);
                 
@@ -115,11 +139,11 @@ public class SalePanel extends javax.swing.JPanel {
                 productName.setText("<html><body style='max-width: 120px;'>" + product.getTitle() + "</body></html>");
                 productPrice.setText("<html><body style='max-width: 120px;'>Precio: " + product.getPrice() + "$</body></html>");
                 
-                if(product.getAvailability() == 0) {
+                if(product.getAvailability() == 0) { // Si no hay disponibles el fondo se coloca rojo
                     panelProductSelected.setBackground(new Color(219, 55, 55));
                     productStock.setText("<html><body style='max-width: 120px;'>No hay stock disponible</body></html>");
                     if(btnAdd.isVisible()) btnAdd.setVisible(false);
-                } else {
+                } else { // Si hay disponibles el fondo se coloca azul
                     panelProductSelected.setBackground(new Color(41, 117, 185));
                     productStock.setText("<html><body style='max-width: 120px;'>" + product.getAvailability() + " disponibles</body></html>");
                     btnAdd.setVisible(true);
@@ -129,11 +153,13 @@ public class SalePanel extends javax.swing.JPanel {
             }
         };
         
+        //* Se cambia el editor de casilla de la columna 2 para calcular mejor los importes de la tabla
         table.getColumnModel().getColumn(2).setCellEditor(new TableStockCellEditor(3, stockEvent));
         
+        //* Se cambia el renderizado y el editor de casilla de la columna 4 para eliminar las filas de la tabla
         table.getColumnModel().getColumn(4).setCellRenderer(new TableActionCellRender(true, new Color(162,175,186), new Color(200, 218, 234)));
         table.getColumnModel().getColumn(4).setCellEditor(new TableActionCellEditor(event, true, new Color(162,175,186), new Color(200, 218, 234)));
-        ((com.component.complement.TableCustom) table).fixTable(scrollPane);
+        ((com.component.complement.TableCustom) table).fixTable(scrollPane); // Rellena la parte de arriba a la derecha de la tabla
         
         panelSearch.addItemEvent(itemEvent);
         
@@ -142,6 +168,7 @@ public class SalePanel extends javax.swing.JPanel {
         
     }
     
+    //* Busca los productos semejantes colocados en el inputSearch de la DB
     public List<Product> search(List<String[]> sentencesAndValues) {
         try {
             ProductService productService = new ProductService();
@@ -155,6 +182,7 @@ public class SalePanel extends javax.swing.JPanel {
         return new ArrayList<>();
     }
     
+    //* Valida y cambia el icono del listado productos mostrados en el panelSearch
     public void validateSelectedProducts() {
         
         for(Object[] product: listProducts) {
@@ -171,6 +199,7 @@ public class SalePanel extends javax.swing.JPanel {
         searchMenu.revalidate();
     }
     
+    //* Cambia la visibilidad de los inputs para registrar el cliente o mostrar sus datos
     private void setVisibleFormClient(boolean visible) {
         labelClientFullName.setVisible(visible);
         labelClientPhone.setVisible(visible);
@@ -188,12 +217,14 @@ public class SalePanel extends javax.swing.JPanel {
         panelTabClient.repaint();
     }
     
+    //* habilita y deshabilita los inputs en el caso de que solo mostrar informacion
     private void setEnabledFormClient(boolean enable) {
         inputClientFullName.setEnabled(enable);
         inputClientPhone.setEnabled(enable);
         inputClientEmail.setEnabled(enable);
     }
     
+    //* Calcula todo el importe total sin impuestos
     public void calculateTableAmount() {
         BigDecimal decimal = new BigDecimal(0);
         
@@ -204,6 +235,7 @@ public class SalePanel extends javax.swing.JPanel {
         setSaleLabel(decimal, 16);
     }
     
+    //* Cambiar los montos subTotal, iva y total de la interfaz visual (tambien calcula el tax, totalDecimal)
     public void setSaleLabel(BigDecimal products, int porcent) {
         BigDecimal porcentDecimal = new BigDecimal(porcent);
         BigDecimal ivaDecimal = products.multiply(porcentDecimal.divide(new BigDecimal(100)));
@@ -220,21 +252,21 @@ public class SalePanel extends javax.swing.JPanel {
         else btnSale.setVisible(false);
     }
     
+    //* Verifica si esta abierta una transaccion para cerrarla y hacer rollBack (porque los clientes no son commiteados hasta que hayan tenido una compra)
     public void validateClientRif() {
         ClientService clientService = new ClientService();
             
-            try {
+        try {
                 
-                if(clientService.isConnected()) {
-                    clientService.applyRollBack();
-                    clientService.closeConnection();
-                }
-                    
-                
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
-                JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+            if(clientService.isConnected()) {
+                clientService.applyRollBack();
+                clientService.closeConnection();
             }
+                
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -663,11 +695,13 @@ public class SalePanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //* Cuando el inputSearch es clickeado se muestra el panelSearch
     private void inputSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inputSearchMouseClicked
         if(panelSearch.getItemSize() > 0)
             searchMenu.show(inputSearch, 0, inputSearch.getHeight());
     }//GEN-LAST:event_inputSearchMouseClicked
 
+    //* Extrae el texto del inputSearch para luego indentificar que tipo de sentencia realizar y aplicar la busqueda
     private void inputSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputSearchKeyReleased
         if(evt.getKeyCode() != KeyEvent.VK_UP && evt.getKeyCode() != KeyEvent.VK_DOWN && evt.getKeyCode() != KeyEvent.VK_ENTER) {
             String search = inputSearch.getText().trim();
@@ -680,7 +714,7 @@ public class SalePanel extends javax.swing.JPanel {
             
             List<Product> products = search(sentencesAndValues);
             
-            listProducts.clear();
+            listProducts.clear(); // Una vez realizada la busqueda el listado items que se encontraban en el panelSearch se remueven
             
             for(Product product: products) {
                 listProducts.add(new Object[]{product, selectedProducts.contains(product)});
@@ -695,6 +729,7 @@ public class SalePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_inputSearchKeyReleased
 
+    //* Se presiona el btnAdd se añade el producto seleccionado del panelSearch a la tabla
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.addRow(new Object[]{productSelected.getId(), productSelected.getTitle(), 1, productSelected.getPrice()});
@@ -709,6 +744,7 @@ public class SalePanel extends javax.swing.JPanel {
         btnAdd.setVisible(false);
     }//GEN-LAST:event_btnAddActionPerformed
 
+    //* Se valida que el inputClientRif solo permita numeros y se remueve el cliente que se encontraba en client tras solo editar su rif
     private void inputClientRifKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputClientRifKeyTyped
         char c = evt.getKeyChar();
         if(!Character.isDigit(c) || (c == '0' && inputClientRif.getText().isEmpty()))
@@ -724,6 +760,7 @@ public class SalePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_inputClientRifKeyTyped
 
+    //* Realiza la busqueda del cliente con el rif insertado, si no lo encuentra se habilitan los inputs para crearlo
     private void inputClientRifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputClientRifActionPerformed
         try {
             String rif = ((String) selectClientRif.getSelectedItem()) + inputClientRif.getText();
@@ -755,6 +792,7 @@ public class SalePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_inputClientRifActionPerformed
 
+    //* Valida y extrae los datos de los inputs para crear un cliente mediante una transaccion
     private void btnAddClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddClientActionPerformed
         try {
             ValidateInput.isEmptyOrBlank(List.of(inputClientFullName, inputClientPhone, inputClientEmail));
@@ -780,6 +818,7 @@ public class SalePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnAddClientActionPerformed
 
+    //* Si se llega a cambiar y ya se tenia guardado en el atributo client se vacia
     private void selectClientRifItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_selectClientRifItemStateChanged
         if(client != null) {
             client = null;
@@ -791,6 +830,7 @@ public class SalePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_selectClientRifItemStateChanged
 
+    //* Calcular el importe total tras ir a la pestaña de venta
     private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
         int selectedIndex = tabbedPane.getSelectedIndex();
         
@@ -799,14 +839,13 @@ public class SalePanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_tabbedPaneStateChanged
 
+    //* Registrar la venta obteniendo los productos desde la tabla y la cantidad que se desea y descontando el stock de los productos
     private void btnSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaleActionPerformed
         if(client != null) {
             SaleInvoiceService saleInvoiceService = new SaleInvoiceService();
             
             try {
                 int saleInvoiceId = saleInvoiceService.createSaleInvoice(totalDecimal, tax, Demo.user.getId(), client.getId());
-                
-                System.out.println("create Invoice -> " + saleInvoiceId);
                 
                 List<Sale> listTable = new ArrayList<>();
                 
@@ -816,7 +855,8 @@ public class SalePanel extends javax.swing.JPanel {
                                             Integer.parseInt(table.getModel().getValueAt(i, 2).toString()),
                                             new BigDecimal(table.getModel().getValueAt(i, 3).toString())));
                 
-                System.out.println("finish forEach table");
+                ProductService productService = new ProductService();
+                productService.decreaseStockProducts(listTable);
                 
                 SaleService saleService = new SaleService();
                 saleService.createSales(listTable);
@@ -830,7 +870,7 @@ public class SalePanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
             }
             
-        } else tabbedPane.setSelectedIndex(1);
+        } else tabbedPane.setSelectedIndex(1); // Si no se a confirmado cliente lo envia a la pestaña para que lo busque o registre
     }//GEN-LAST:event_btnSaleActionPerformed
 
 
