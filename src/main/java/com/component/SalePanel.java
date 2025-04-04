@@ -60,7 +60,7 @@ public class SalePanel extends javax.swing.JPanel {
     private List<Product> listProductOnTable = new ArrayList<>();
     private Set<Product> selectedProducts = new HashSet<>();
     private List<Object[]> listProducts = new ArrayList<>();
-    private BigDecimal tax, totalDecimal;
+    private BigDecimal tax, totalDecimal, subTotalDecimal;
     
     public Product productSelected;
     
@@ -238,15 +238,15 @@ public class SalePanel extends javax.swing.JPanel {
     //* Cambiar los montos subTotal, iva y total de la interfaz visual (tambien calcula el tax, totalDecimal)
     public void setSaleLabel(BigDecimal products, int porcent) {
         BigDecimal porcentDecimal = new BigDecimal(porcent);
-        BigDecimal ivaDecimal = products.multiply(porcentDecimal.divide(new BigDecimal(100)));
+        tax = products.multiply(porcentDecimal.divide(new BigDecimal(100)));
         
-        totalDecimal = ivaDecimal.add(products).setScale(2, RoundingMode.HALF_UP);
+        totalDecimal = tax.add(products).setScale(2, RoundingMode.HALF_UP);
         
         subTotal.setText("<html><body>SubTotal:"+ products.toPlainString() +"$</body></html>");
-        iva.setText("<html><body>IVA ("+ porcent +"%):" + ivaDecimal.toPlainString() + "$</body></html>");
+        iva.setText("<html><body>IVA ("+ porcent +"%):" + tax.toPlainString() + "$</body></html>");
         total.setText("<html><body>Total:" + totalDecimal.toPlainString() + "$</body></html>");
         
-        tax = ivaDecimal.setScale(2, RoundingMode.HALF_UP);
+        subTotalDecimal = products;
         
         if(products.intValue() > 0) btnSale.setVisible(true);
         else btnSale.setVisible(false);
@@ -845,7 +845,7 @@ public class SalePanel extends javax.swing.JPanel {
             SaleInvoiceService saleInvoiceService = new SaleInvoiceService();
             
             try {
-                int saleInvoiceId = saleInvoiceService.createSaleInvoice(totalDecimal, tax, Demo.user.getId(), client.getId());
+                int saleInvoiceId = saleInvoiceService.createSaleInvoice(totalDecimal, subTotalDecimal, tax, Demo.user.getId(), client.getId());
                 
                 List<Sale> listTable = new ArrayList<>();
                 
@@ -870,7 +870,7 @@ public class SalePanel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
             }
             
-        } else tabbedPane.setSelectedIndex(1); // Si no se a confirmado cliente lo envia a la pestaña para que lo busque o registre
+        } else tabbedPane.setSelectedIndex(1); // Si no se a confirmado cliente al usuario lo envia a la pestaña para que lo busque o registre
     }//GEN-LAST:event_btnSaleActionPerformed
 
 
