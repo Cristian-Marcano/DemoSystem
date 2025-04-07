@@ -9,8 +9,14 @@ import javax.swing.JPanel;
 /**
  *
  * @author Cristian
+ * Clase complementaria que ayuda a sombrear
+ * el panel debajo de esta para llamar la atencion de un componente
  */
 public class GlassPane extends JPanel {
+    
+    /**
+     * opacity: dato que se usa para la transparencia del background
+     */
     
     private float opacity;
     
@@ -18,12 +24,13 @@ public class GlassPane extends JPanel {
         setOpaque(false);
     }
     
+    //* Cambia la opacidad
     public void setOpacity(float opacity) {
         this.opacity = opacity;
         repaint();
     }
     
-    @Override
+    @Override //* Renderiza|Pinta el componente con opacidad instanciada
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs);
         
