@@ -34,20 +34,19 @@ public class SideBar extends JPanel {
     private JLayeredPane layared;
     private boolean show = false; // Inicialmente el sideBar no se muestra
     
-    public SideBar(JLayeredPane layared, GlassPane glass, JPanel panel) {
-        initSideBar(layared, glass, panel);
+    public SideBar(JLayeredPane layared, GlassPane glass) {
+        initSideBar(layared, glass);
     }
     
-    public SideBar(JLayeredPane layared, GlassPane glass, JPanel panel, boolean show) {
-        initSideBar(layared, glass, panel);
+    public SideBar(JLayeredPane layared, GlassPane glass, boolean show) {
+        initSideBar(layared, glass);
         this.show = show;
     }
     
     //* Instancia las funciones y atributos de la clase
-    private void initSideBar(JLayeredPane layared, GlassPane glass, JPanel panel) {
+    private void initSideBar(JLayeredPane layared, GlassPane glass) {
         this.layared = layared;
         this.glass = glass;
-        this.panel = panel;
         
         setBounds(layared.getSize().width, 0, 325, layared.getSize().height);
         glass.setBounds(0, 0, layared.getSize().width, layared.getSize().height);
@@ -68,9 +67,6 @@ public class SideBar extends JPanel {
             }
         });
         
-        content = initShowJPanel();
-        content.showPanel(); // Muestra el panel que se encuentra en el SideBar
-        
         createAnimator();
     }
     
@@ -78,7 +74,6 @@ public class SideBar extends JPanel {
     public void setPanel(JPanel panel) {
         this.panel = panel;
         content = initShowJPanel();
-        content.showPanel();
     }
     
     //* Instancia el objeto con sideBar como padre y sus medidas
