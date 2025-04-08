@@ -1,20 +1,66 @@
 package com.component;
 
+import com.event.FormUserEvent;
+import com.model.User;
+import com.model.UserInfo;
+import com.util.ValidateInput;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Cristian
  */
 public class PanelFormUser extends javax.swing.JPanel {
-
+    
+    private int mode; // 0: buscar. 1: crear. 2: editar
+    private User user;
+    private UserInfo userInfo;
     private boolean show = false;
+    private FormUserEvent userEvent;
     
     /**
      * Creates new form PanelFormUser
      */
-    public PanelFormUser() {
+    public PanelFormUser(FormUserEvent userEvent, int mode) {
         initComponents();
+        this.userEvent = userEvent;
+        this.mode = mode;
+        
+        if(mode == 0) { 
+            title.setText("Buscar");
+            btn.setText("Buscar");
+            
+            labelPassword.setVisible(false);
+            separatorPassword.setVisible(false);
+            inputPassword.setVisible(false);
+            iconShowAndHidden.setVisible(false);
+            
+            selectRole.insertItemAt("Cualquiera", 0);
+            selectRole.setSelectedIndex(0);
+        } else if(mode == 1) {
+            title.setText("Registrar");
+            btn.setText("Registrar");
+        } else {
+            title.setText("Editar");
+            btn.setText("Editar");
+        }
+    }
+    
+    public void setUser(User user, UserInfo userInfo) {
+        this.user = user;
+        this.userInfo = userInfo;
+        setValues();
+    }
+    
+    private void setValues() {
+        inputUsername.setText(user.getUsername());
+        inputFirstName.setText(userInfo.getFirstName());
+        inputLastName.setText(userInfo.getLastName());
+        inputCI.setText(userInfo.getCi());
+        inputPhone.setText(userInfo.getPhone());
+        inputPassword.setText(user.getPassword());
     }
 
     /**
@@ -51,7 +97,7 @@ public class PanelFormUser extends javax.swing.JPanel {
         separatorPassword = new javax.swing.JSeparator();
         inputPassword = new javax.swing.JPasswordField();
         iconShowAndHidden = new javax.swing.JLabel();
-        btnSignUp = new javax.swing.JButton();
+        btn = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(210, 210, 210));
 
@@ -137,11 +183,6 @@ public class PanelFormUser extends javax.swing.JPanel {
         selectRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empleado", "Admin" }));
         selectRole.setBorder(null);
         selectRole.setPreferredSize(new java.awt.Dimension(97, 27));
-        selectRole.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                selectRoleItemStateChanged(evt);
-            }
-        });
 
         labelPassword.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
         labelPassword.setForeground(new java.awt.Color(60, 60, 60));
@@ -166,16 +207,16 @@ public class PanelFormUser extends javax.swing.JPanel {
             }
         });
 
-        btnSignUp.setBackground(new java.awt.Color(45, 155, 240));
-        btnSignUp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnSignUp.setForeground(new java.awt.Color(250, 250, 250));
-        btnSignUp.setText("Registrarse");
-        btnSignUp.setBorder(null);
-        btnSignUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSignUp.setPreferredSize(new java.awt.Dimension(92, 30));
-        btnSignUp.addActionListener(new java.awt.event.ActionListener() {
+        btn.setBackground(new java.awt.Color(45, 155, 240));
+        btn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btn.setForeground(new java.awt.Color(250, 250, 250));
+        btn.setText("Registrarse");
+        btn.setBorder(null);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new java.awt.Dimension(92, 30));
+        btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSignUpActionPerformed(evt);
+                btnActionPerformed(evt);
             }
         });
 
@@ -231,7 +272,7 @@ public class PanelFormUser extends javax.swing.JPanel {
                 .addGap(25, 25, 25))
             .addGroup(formLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         formLayout.setVerticalGroup(
@@ -284,7 +325,7 @@ public class PanelFormUser extends javax.swing.JPanel {
                     .addComponent(inputPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(iconShowAndHidden, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -313,30 +354,51 @@ public class PanelFormUser extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_iconShowAndHiddenMouseClicked
 
-    private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
-//        try {
-//            ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputFirstName, inputLastName, inputCI, inputPhone, inputPassword));
-//
-//            ValidateInput.isMinimumLength(inputPassword, 8);
-//
-//            String username = inputUsername.getText(), firstName = inputFirstName.getText(), lastName = inputLastName.getText(),
-//            ci = inputCI.getText(), phone = inputPhone.getText(), password = new String(inputPassword.getPassword());
-//
-//            authEvent.onSignUp(username, password, firstName, lastName, ci, phone);
-//
-//        } catch(Exception e) {
-//            System.err.println(e.getMessage());
-//            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
-//        }
-    }//GEN-LAST:event_btnSignUpActionPerformed
+    private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
+        try {
+            
+            String username = inputUsername.getText(), firstName = inputFirstName.getText(), lastName = inputLastName.getText(),
+                    ci = inputCI.getText(), phone = inputPhone.getText(), password = new String(inputPassword.getPassword()), 
+                    rol = selectRole.getSelectedItem().toString();
+            
+            if(mode == 0) {
+                
+                userEvent.onSearch(username, firstName, lastName, ci, phone, rol);
+                
+            } else {
+                
+                ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputFirstName, inputLastName, inputCI, inputPhone, inputPassword));
+                
+                ValidateInput.isMinimumLength(inputPassword, 8);
+                
+                if(mode == 1) {
+                    userEvent.onCreate(username, password, firstName, lastName, ci, phone, rol);
+                    
+                    inputUsername.setText("");
+                    inputFirstName.setText("");
+                    inputLastName.setText("");
+                    inputCI.setText("");
+                    inputPhone.setText("");
+                    inputPassword.setText("");
+                    
+                } else {
+                    int option = JOptionPane.showConfirmDialog(null,"¿Esta seguro de editar este usuario?", "Advertencia",
+                                                            JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
+                    
+                    if(option == 0)
+                        userEvent.onEdit(username, password, firstName, lastName, ci, phone, rol);
+                }
+            } 
 
-    private void selectRoleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_selectRoleItemStateChanged
-        
-    }//GEN-LAST:event_selectRoleItemStateChanged
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSignUp;
+    private javax.swing.JButton btn;
     private javax.swing.JPanel form;
     private javax.swing.JLabel iconShowAndHidden;
     private javax.swing.JTextField inputCI;
