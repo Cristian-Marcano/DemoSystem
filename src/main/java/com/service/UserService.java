@@ -27,7 +27,7 @@ public class UserService extends Database {
         Object[] user = null;
         if(result.next())
             user = new Object[]{new User(result.getInt("u.id"), result.getString("u.username"), result.getString("u.keyword"), 
-                                    result.getString("position"), result.getBoolean("u.access")),
+                                    result.getString("u.position"), result.getBoolean("u.access")),
                                 new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_account_id"), result.getString("ui.first_name"),
                                     result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("ui.ci"))};
         closeConnection();
@@ -64,7 +64,7 @@ public class UserService extends Database {
     
     //* Obtener todos los usuarios en orden de creación 
     public List<Object[]> getUsers() throws SQLException {
-        String sql = "SELECT * FROM user_account AS u JOIN user_account_info AS ui ON u.id = ui.user_id WHERE u.access = 1 AND u.id <> ? ORDER BY u.id DESC";
+        String sql = "SELECT * FROM user_account AS u JOIN user_account_info AS ui ON u.id = ui.user_account_id WHERE u.access = 1 AND u.id <> ? ORDER BY u.id DESC";
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setInt(1, Demo.user.getId());
@@ -73,7 +73,7 @@ public class UserService extends Database {
         while(result.next())
             users.add(new Object[]{new User(result.getInt("u.id"), result.getString("u.username"), result.getString("u.keyword"),
                                         result.getString("u.position"), result.getBoolean("u.access")),
-                                   new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_id"), result.getString("ui.first_name"),
+                                   new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_account_id"), result.getString("ui.first_name"),
                                         result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("ui.ci"))});
         closeConnection();
         return users;
@@ -81,7 +81,7 @@ public class UserService extends Database {
     
     //* Buscar usuarios por sus distintos datos, como username, role, nombre o apellido etc
     public List<Object[]> searchUsers(List<String[]> sentencesAndValues) throws SQLException {
-        String sql = "SELECT * FROM user_account AS u JOIN user_account_info AS ui ON u.id = ui.user_id";
+        String sql = "SELECT * FROM user_account AS u JOIN user_account_info AS ui ON u.id = ui.user_account_id";
         if(!sentencesAndValues.isEmpty()) {
             sql += " WHERE ";
             for(String[] sentence: sentencesAndValues) 
@@ -97,7 +97,7 @@ public class UserService extends Database {
         while(result.next()) 
             users.add(new Object[]{new User(result.getInt("u.id"), result.getString("u.username"), result.getString("u.keyword"),
                                         result.getString("u.position"), result.getBoolean("u.access")),
-                                   new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_id"), result.getString("ui.first_name"),
+                                   new UserInfo(result.getInt("ui.id"), result.getInt("ui.user_account_id"), result.getString("ui.first_name"),
                                         result.getString("ui.last_name"), result.getString("ui.phone"), result.getString("ui.ci"))});
         closeConnection();
         return users;
