@@ -361,18 +361,18 @@ public class PanelFormUser extends javax.swing.JPanel {
                     ci = inputCI.getText(), phone = inputPhone.getText(), password = new String(inputPassword.getPassword()), 
                     rol = selectRole.getSelectedItem().toString();
             
+            String position = (rol.contains("Admin")) ? "admin" : (rol.contains("Empleado")) ? "employee" : rol;
+            
             if(mode == 0) {
-                
-                userEvent.onSearch(username, firstName, lastName, ci, phone, rol);
+                userEvent.onSearch(username, firstName, lastName, ci, phone, position);
                 
             } else {
-                
                 ValidateInput.isEmptyOrBlank(List.of(inputUsername, inputFirstName, inputLastName, inputCI, inputPhone, inputPassword));
                 
                 ValidateInput.isMinimumLength(inputPassword, 8);
                 
                 if(mode == 1) {
-                    userEvent.onCreate(username, password, firstName, lastName, ci, phone, rol);
+                    userEvent.onCreate(username, password, firstName, lastName, ci, phone, position);
                     
                     inputUsername.setText("");
                     inputFirstName.setText("");
@@ -383,10 +383,19 @@ public class PanelFormUser extends javax.swing.JPanel {
                     
                 } else {
                     int option = JOptionPane.showConfirmDialog(null,"¿Esta seguro de editar este usuario?", "Advertencia",
-                                                            JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
+                                                                JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
+                    
+                    user.setUsername(username);
+                    user.setPassword(password);
+                    user.setPosition(position);
+                    
+                    userInfo.setFirstName(firstName);
+                    userInfo.setLastName(lastName);
+                    userInfo.setPhone(phone);
+                    userInfo.setCi(ci);
                     
                     if(option == 0)
-                        userEvent.onEdit(username, password, firstName, lastName, ci, phone, rol);
+                        userEvent.onEdit(user, userInfo);
                 }
             } 
 
