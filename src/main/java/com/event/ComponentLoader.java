@@ -12,4 +12,6 @@ public interface ComponentLoader {
     public void scrollableContentLoader(List<JPanel> listPanels) throws Exception;
     
     public void resizeContentLoader() throws Exception;
+    
+    public void refreshContent();
 }
