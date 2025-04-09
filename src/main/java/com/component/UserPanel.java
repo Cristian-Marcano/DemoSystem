@@ -2,12 +2,14 @@ package com.component;
 
 import com.component.complement.ActionButton;
 import com.component.complement.SideBar;
+import com.event.ComponentLoader;
 import com.event.FormUserEvent;
+import com.event.ItemEvent;
+import com.model.Product;
+import com.model.User;
 import com.model.UserInfo;
 import com.service.UserInfoService;
 import com.service.UserService;
-import com.util.ShowJPanel;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionListener;
@@ -20,6 +22,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -28,15 +31,64 @@ import javax.swing.JOptionPane;
 public class UserPanel extends javax.swing.JPanel {
 
     private SideBar sideBar;
+    private ItemEvent itemEvent;
     private FormUserEvent userEvent;
+    private ComponentLoader componentLoader;
+    private List<Object[]> listUsers = new ArrayList<>();
     private PanelFormUser addFormUser, searchFormUser, editFormUser;
     private ActionButton btnAdd, btnSearch;
     
     /**
      * Creates new form UserPanel
      */
-    public UserPanel() {
+    public UserPanel(ComponentLoader componentLoader) {
         initComponents();
+        
+        this.componentLoader = componentLoader;
+        
+        itemEvent = new ItemEvent() {
+            @Override
+            public void onClick(Product product) { }
+
+            @Override
+            public void onEdit(User user, UserInfo userInfo) {
+                btnAdd.setVisible(false);
+                btnSearch.setVisible(false);
+                
+                sideBar.setPanel(editFormUser);
+                editFormUser.setUser(user, userInfo);
+                
+                sideBar.toggle();
+                
+                scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                scroll.setEnabled(!scroll.isEnabled());
+            }
+
+            @Override
+            public void onRemove(int id) {
+                try {
+                    UserService userService = new UserService();
+                    userService.removeUser(id);
+                    
+                    btnAdd.setVisible(true);
+                    btnSearch.setVisible(true);
+                    
+                    sideBar.toggle();
+                
+                    scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                    scroll.setEnabled(!scroll.isEnabled());
+                    
+                    content.removeAll();
+                    
+                    initUserContent();
+                    
+                    componentLoader.refreshContent();
+                } catch(SQLException e) {
+                    System.err.println(e.getMessage());
+                    JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
         
         userEvent = new FormUserEvent() {
             @Override
@@ -50,6 +102,18 @@ public class UserPanel extends javax.swing.JPanel {
                     UserInfo userInfo = new UserInfo(0, userId, firstName, lastName, phone, ci);
                     
                     userInfoService.createUserInfo(userInfo);
+                    
+                    btnAdd.setVisible(true);
+                    btnSearch.setVisible(true);
+                    
+                    sideBar.toggle();
+                
+                    scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                    scroll.setEnabled(!scroll.isEnabled());
+                    
+                    content.removeAll();
+                    
+                    initUserContent();
                     
                 } catch(SQLException e) {
                     try {
@@ -76,7 +140,7 @@ public class UserPanel extends javax.swing.JPanel {
                 try {
                     List<String[]> sentencesAndValues = new ArrayList<>();
                     
-                    if(!username.isEmpty() && username.isBlank()) sentencesAndValues.add(new String[]{"u.username LIKE ?", "%" + username + "%"});
+                    if(!username.isEmpty() && !username.isBlank()) sentencesAndValues.add(new String[]{"u.username LIKE ?", "%" + username + "%"});
                     
                     if(!firstName.isEmpty() && !firstName.isBlank()) sentencesAndValues.add(new String[]{"ui.first_name LIKE ?", "%" + firstName + "%"});
                     
@@ -88,7 +152,19 @@ public class UserPanel extends javax.swing.JPanel {
                     
                     if(!position.contains("Cualquiera")) sentencesAndValues.add(new String[]{"u.position = ?", position});
                     
-                    List<Object[]> listUsers = userService.searchUsers(sentencesAndValues);
+                    listUsers = userService.searchUsers(sentencesAndValues);
+                    
+                    btnAdd.setVisible(true);
+                    btnSearch.setVisible(true);
+                    
+                    sideBar.toggle();
+                
+                    scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                    scroll.setEnabled(!scroll.isEnabled());
+                    
+                    content.removeAll();
+                    
+                    initUserContent();
                     
                 } catch(SQLException e) {
                     System.err.println(e.getMessage());
@@ -97,8 +173,43 @@ public class UserPanel extends javax.swing.JPanel {
             }
             
             @Override
-            public void onEdit(String username, String password, String firstName, String lastName, String ci, String phone, String position) throws Exception {
+            public void onEdit(User user, UserInfo userInfo) throws Exception {
+                UserService userService = new UserService();
+                UserInfoService userInfoService = new UserInfoService();
                 
+                try {
+                    userService.updateUser(user);
+                    
+                    userInfoService.updateUserInfo(userInfo);
+                    
+                    btnAdd.setVisible(true);
+                    btnSearch.setVisible(true);
+                    
+                    sideBar.toggle();
+                
+                    scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                    scroll.setEnabled(!scroll.isEnabled());
+                    
+                    content.removeAll();
+                    
+                    initUserContent();
+                    
+                } catch(SQLException e) {
+                    try {
+                        userInfoService.applyRollBack();
+                    } catch (SQLException ex) { }
+                    
+                    if(e.getErrorCode() == 1062) {
+                        String ex = (e.getMessage().contains("username")) ? "un nombre de usuario" : 
+                                (e.getMessage().contains("ci")) ? "una cedula" : "un nro. de telefono";
+                        
+                        throw new Exception("No puede insertar " + ex + " ya existente");
+                        
+                    } else {
+                        System.err.println(e.getMessage());
+                        JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
             }
         };
         
@@ -173,6 +284,37 @@ public class UserPanel extends javax.swing.JPanel {
             }
         });
     }
+    
+    public void initUserContent() {
+        if(listUsers.isEmpty()) {
+            UserService userService = new UserService();
+            
+            try { 
+                listUsers = userService.getUsers();
+                
+            } catch(SQLException e) {
+                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        
+        List<JPanel> listPanels = new ArrayList<>();
+        
+        try {
+            
+            for(Object[] userValue: listUsers)
+                listPanels.add(new UserItem((User) userValue[0], (UserInfo) userValue[1], itemEvent));
+            
+            componentLoader.scrollableContentLoader(listPanels);
+            
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
+        
+        listUsers.clear();
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -183,10 +325,10 @@ public class UserPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        layared = new javax.swing.JLayeredPane();
-        glassPane = new com.component.complement.GlassPane();
         scroll = new com.component.complement.ScrollPaneWin11();
         content = new javax.swing.JPanel();
+        layared = new javax.swing.JLayeredPane();
+        glassPane = new com.component.complement.GlassPane();
 
         setBackground(new java.awt.Color(240, 240, 240));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -194,6 +336,25 @@ public class UserPanel extends javax.swing.JPanel {
                 formComponentResized(evt);
             }
         });
+
+        scroll.setBorder(null);
+        scroll.setPreferredSize(new java.awt.Dimension(600, 630));
+
+        content.setBackground(new java.awt.Color(240, 240, 240));
+        content.setPreferredSize(new java.awt.Dimension(600, 620));
+
+        javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
+        content.setLayout(contentLayout);
+        contentLayout.setHorizontalGroup(
+            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+        );
+        contentLayout.setVerticalGroup(
+            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 630, Short.MAX_VALUE)
+        );
+
+        scroll.setViewportView(content);
 
         javax.swing.GroupLayout glassPaneLayout = new javax.swing.GroupLayout(glassPane);
         glassPane.setLayout(glassPaneLayout);
@@ -219,25 +380,6 @@ public class UserPanel extends javax.swing.JPanel {
             .addComponent(glassPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        scroll.setBorder(null);
-        scroll.setPreferredSize(new java.awt.Dimension(600, 630));
-
-        content.setBackground(new java.awt.Color(240, 240, 240));
-        content.setPreferredSize(new java.awt.Dimension(600, 620));
-
-        javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
-        content.setLayout(contentLayout);
-        contentLayout.setHorizontalGroup(
-            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
-        );
-        contentLayout.setVerticalGroup(
-            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 630, Short.MAX_VALUE)
-        );
-
-        scroll.setViewportView(content);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -257,6 +399,13 @@ public class UserPanel extends javax.swing.JPanel {
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         btnAdd.setLocation(layared.getSize().width - 52, layared.getSize().height - 60);
         btnSearch.setLocation(layared.getSize().width - 52, layared.getSize().height - 120);
+        
+        try {
+            componentLoader.resizeContentLoader();
+        } catch(Exception e) {
+            System.err.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_formComponentResized
 
 
