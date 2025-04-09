@@ -87,6 +87,7 @@ public class UserItem extends javax.swing.JPanel {
 
         btnEdit.setBackground(new java.awt.Color(210, 210, 210));
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit-icon.png"))); // NOI18N
+        btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEdit.setPreferredSize(new java.awt.Dimension(40, 40));
         btnEdit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -104,6 +105,7 @@ public class UserItem extends javax.swing.JPanel {
 
         btnRemove.setBackground(new java.awt.Color(210, 210, 210));
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash_logo.png"))); // NOI18N
+        btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setPreferredSize(new java.awt.Dimension(40, 40));
         btnRemove.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
