@@ -1,5 +1,6 @@
 package com.component;
 
+import com.event.ItemEvent;
 import com.model.User;
 import com.model.UserInfo;
 
@@ -8,17 +9,19 @@ import com.model.UserInfo;
  * @author Cristian
  */
 public class UserItem extends javax.swing.JPanel {
-
+    
     private User user;
     private UserInfo userInfo;
+    private ItemEvent itemEvent;
     
     /**
      * Creates new form UserItem
      */
-    public UserItem(User user, UserInfo userInfo) {
+    public UserItem(User user, UserInfo userInfo, ItemEvent itemEvent) {
         initComponents();
         this.user = user;
         this.userInfo = userInfo;
+        this.itemEvent = itemEvent; 
         setValues();
     }
     
@@ -52,36 +55,50 @@ public class UserItem extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(225, 225, 225));
         setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(148, 148, 148)));
+        setMaximumSize(new java.awt.Dimension(450, 240));
+        setPreferredSize(new java.awt.Dimension(428, 232));
 
-        labelUsername.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        labelUsername.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         labelUsername.setForeground(new java.awt.Color(30, 30, 30));
         labelUsername.setText("Nombre de Usuario: {username}");
 
-        labelFirstName.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        labelFirstName.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         labelFirstName.setForeground(new java.awt.Color(30, 30, 30));
         labelFirstName.setText("Nombre: {name}");
 
-        labelLastName.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        labelLastName.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         labelLastName.setForeground(new java.awt.Color(30, 30, 30));
         labelLastName.setText("Apellido: {lastName}");
 
-        labelPhone.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        labelPhone.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         labelPhone.setForeground(new java.awt.Color(30, 30, 30));
         labelPhone.setText("Telefono: {Phone}");
 
-        labelCI.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        labelCI.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         labelCI.setForeground(new java.awt.Color(30, 30, 30));
         labelCI.setText("CI: {ci}");
 
-        labelRole.setFont(new java.awt.Font("Bahnschrift", 0, 16)); // NOI18N
+        labelRole.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
         labelRole.setForeground(new java.awt.Color(30, 30, 30));
         labelRole.setText("Role: {role}");
 
         btnEdit.setBackground(new java.awt.Color(190, 190, 190));
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit-icon.png"))); // NOI18N
+        btnEdit.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnRemove.setBackground(new java.awt.Color(190, 190, 190));
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash_logo.png"))); // NOI18N
+        btnRemove.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -101,9 +118,9 @@ public class UserItem extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(labelRole)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRemove)
+                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnEdit)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21))))
         );
         layout.setVerticalGroup(
@@ -121,14 +138,21 @@ public class UserItem extends javax.swing.JPanel {
                 .addComponent(labelCI)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnEdit)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(labelRole)
-                        .addComponent(btnRemove)))
+                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        itemEvent.onRemove(user.getId());
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        itemEvent.onEdit(user, userInfo);
+    }//GEN-LAST:event_btnEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
