@@ -86,12 +86,13 @@ public class UserService extends Database {
             sql += " WHERE ";
             for(String[] sentence: sentencesAndValues) 
                 sql += (sql.endsWith("? ")) ? "AND " + sentence[0] : sentence[0];
+            sql += "AND u.id <> ?";
         }
         applyConnection();
         statement = connection.prepareStatement(sql);
         int i;
         for(i=0; i<sentencesAndValues.size(); i++) statement.setString(i+1, sentencesAndValues.get(i)[1]);
-        statement.setInt(i+2, Demo.user.getId());
+        statement.setInt(i+1, Demo.user.getId());
         result = statement.executeQuery();
         List<Object[]> users = new ArrayList<>();
         while(result.next()) 
