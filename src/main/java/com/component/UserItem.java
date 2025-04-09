@@ -3,6 +3,7 @@ package com.component;
 import com.event.ItemEvent;
 import com.model.User;
 import com.model.UserInfo;
+import java.awt.Color;
 
 /**
  *
@@ -13,6 +14,8 @@ public class UserItem extends javax.swing.JPanel {
     private User user;
     private UserInfo userInfo;
     private ItemEvent itemEvent;
+    
+    public Color normal = new Color(210,210,210), hover = new Color(190,190,190);
     
     /**
      * Creates new form UserItem
@@ -32,7 +35,7 @@ public class UserItem extends javax.swing.JPanel {
         labelLastName.setText("Apellido: " + userInfo.getLastName());
         labelPhone.setText("Telefono: " + userInfo.getPhone());
         labelCI.setText("CI: " + userInfo.getCi());
-        labelRole.setText("Role: " + user.getPosition());
+        labelRole.setText("Rol: " + (user.getPosition().contains("employee") ? "Empleado" : "Admin"));
     }
 
     /**
@@ -58,42 +61,58 @@ public class UserItem extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(450, 240));
         setPreferredSize(new java.awt.Dimension(428, 232));
 
-        labelUsername.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        labelUsername.setFont(new java.awt.Font("Bahnschrift", 0, 17)); // NOI18N
         labelUsername.setForeground(new java.awt.Color(30, 30, 30));
         labelUsername.setText("Nombre de Usuario: {username}");
 
-        labelFirstName.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        labelFirstName.setFont(new java.awt.Font("Bahnschrift", 0, 17)); // NOI18N
         labelFirstName.setForeground(new java.awt.Color(30, 30, 30));
         labelFirstName.setText("Nombre: {name}");
 
-        labelLastName.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        labelLastName.setFont(new java.awt.Font("Bahnschrift", 0, 17)); // NOI18N
         labelLastName.setForeground(new java.awt.Color(30, 30, 30));
         labelLastName.setText("Apellido: {lastName}");
 
-        labelPhone.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        labelPhone.setFont(new java.awt.Font("Bahnschrift", 0, 17)); // NOI18N
         labelPhone.setForeground(new java.awt.Color(30, 30, 30));
         labelPhone.setText("Telefono: {Phone}");
 
-        labelCI.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        labelCI.setFont(new java.awt.Font("Bahnschrift", 0, 17)); // NOI18N
         labelCI.setForeground(new java.awt.Color(30, 30, 30));
         labelCI.setText("CI: {ci}");
 
-        labelRole.setFont(new java.awt.Font("Bahnschrift", 0, 18)); // NOI18N
+        labelRole.setFont(new java.awt.Font("Bahnschrift", 0, 17)); // NOI18N
         labelRole.setForeground(new java.awt.Color(30, 30, 30));
         labelRole.setText("Role: {role}");
 
-        btnEdit.setBackground(new java.awt.Color(190, 190, 190));
+        btnEdit.setBackground(new java.awt.Color(210, 210, 210));
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit-icon.png"))); // NOI18N
         btnEdit.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnEdit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEditMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEditMouseExited(evt);
+            }
+        });
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
             }
         });
 
-        btnRemove.setBackground(new java.awt.Color(190, 190, 190));
+        btnRemove.setBackground(new java.awt.Color(210, 210, 210));
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash_logo.png"))); // NOI18N
         btnRemove.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnRemove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnRemoveMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRemoveMouseExited(evt);
+            }
+        });
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -114,7 +133,7 @@ public class UserItem extends javax.swing.JPanel {
                             .addComponent(labelFirstName)
                             .addComponent(labelUsername)
                             .addComponent(labelLastName))
-                        .addContainerGap(136, Short.MAX_VALUE))
+                        .addContainerGap(154, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(labelRole)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -139,10 +158,9 @@ public class UserItem extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(labelRole)
-                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelRole))
+                .addGap(12, 12, 12))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -153,6 +171,22 @@ public class UserItem extends javax.swing.JPanel {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         itemEvent.onEdit(user, userInfo);
     }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnRemoveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoveMouseEntered
+        btnRemove.setBackground(hover);
+    }//GEN-LAST:event_btnRemoveMouseEntered
+
+    private void btnRemoveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoveMouseExited
+        btnRemove.setBackground(normal);
+    }//GEN-LAST:event_btnRemoveMouseExited
+
+    private void btnEditMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditMouseEntered
+        btnEdit.setBackground(hover);
+    }//GEN-LAST:event_btnEditMouseEntered
+
+    private void btnEditMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditMouseExited
+        btnEdit.setBackground(normal);
+    }//GEN-LAST:event_btnEditMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
