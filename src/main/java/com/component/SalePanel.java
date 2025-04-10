@@ -10,6 +10,8 @@ import com.event.TableActionEvent;
 import com.event.TableStockEvent;
 import com.model.Client;
 import com.model.Sale;
+import com.model.User;
+import com.model.UserInfo;
 import com.service.ClientService;
 import com.service.ProductService;
 import com.service.SaleInvoiceService;
@@ -151,6 +153,12 @@ public class SalePanel extends javax.swing.JPanel {
                 
                 searchMenu.setVisible(false);
             }
+            
+            @Override
+            public void onEdit(User user, UserInfo userInfo) { }
+            
+            @Override
+            public void onRemove(int id) { }
         };
         
         //* Se cambia el editor de casilla de la columna 2 para calcular mejor los importes de la tabla
