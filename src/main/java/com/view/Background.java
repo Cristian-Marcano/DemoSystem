@@ -20,9 +20,10 @@ import javax.swing.JPanel;
 public class Background extends javax.swing.JPanel {
     
     /**
-     * Objetos que ayudan a la integracion de componentes visuales a esta interfaz visual
+     * Objetos que ayudan a la integracion y la carga de componentes visuales a esta interfaz visual 
      * 
      * panelHeader: componente cabecera que contiene el logo, nombre y rol del usuario
+     * componentLoader: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos
      * board: objeto que auxilia la integracion de paneles al dashboard
      * headerP: objeto que coopera  en la integracion de paneles al header
      * contentP: objeto que ayuda la integracion de paneles al content
@@ -39,17 +40,17 @@ public class Background extends javax.swing.JPanel {
         initComponents();
         
         componentLoader = new ComponentLoader() {
-            @Override
+            @Override //* Integra|Carga el listado de componentes (items) al contenido del scroll
             public void scrollableContentLoader(List<JPanel> listPanels) throws Exception {
                 contentP.showItemsPanel(listPanels);
             }
             
-            @Override
+            @Override //* Reescala el tamaño del contenido del scroll calculando la cantidad de items que tiene
             public void resizeContentLoader() throws Exception {
                 contentP.resizeScrollPane();
             }
             
-            @Override
+            @Override //* Recarga el contenido del componente
             public void refreshContent() {
                 contentP.refreshContainer();
             }
@@ -64,7 +65,7 @@ public class Background extends javax.swing.JPanel {
         headerP = initPanel(panelHeader, header, new Dimension(header.getPreferredSize()));
         contentP = initPanel(userPanel, content, new Dimension(content.getPreferredSize()));
         
-        userPanel.initUserContent();
+        userPanel.initUserContent(); // Inicia la carga de listado de usuarios
     }
     
     //* Instanciacion del objeto ShowJPanel, pasando por parametros el panel que sera mostrado,
