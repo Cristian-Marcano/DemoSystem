@@ -140,17 +140,17 @@ public class UserPanel extends javax.swing.JPanel {
                 try {
                     List<String[]> sentencesAndValues = new ArrayList<>();
                     
-                    if(!username.isEmpty() && !username.isBlank()) sentencesAndValues.add(new String[]{"u.username LIKE ?", "%" + username + "%"});
+                    if(!username.isEmpty() && !username.isBlank()) sentencesAndValues.add(new String[]{"u.username LIKE ? ", "%" + username + "%"});
                     
-                    if(!firstName.isEmpty() && !firstName.isBlank()) sentencesAndValues.add(new String[]{"ui.first_name LIKE ?", "%" + firstName + "%"});
+                    if(!firstName.isEmpty() && !firstName.isBlank()) sentencesAndValues.add(new String[]{"ui.first_name LIKE ? ", "%" + firstName + "%"});
                     
-                    if(!lastName.isEmpty() && !lastName.isBlank()) sentencesAndValues.add(new String[]{"ui.last_name LIKE ?", "%" + lastName + "%"});
+                    if(!lastName.isEmpty() && !lastName.isBlank()) sentencesAndValues.add(new String[]{"ui.last_name LIKE ? ", "%" + lastName + "%"});
                     
-                    if(!ci.isEmpty() && !ci.isBlank()) sentencesAndValues.add(new String[]{"ui.ci = ?", ci});
+                    if(!ci.isEmpty() && !ci.isBlank()) sentencesAndValues.add(new String[]{"ui.ci = ? ", ci});
                     
-                    if(!phone.isEmpty() && !phone.isBlank()) sentencesAndValues.add(new String[]{"ui.phone = ?", phone});
+                    if(!phone.isEmpty() && !phone.isBlank()) sentencesAndValues.add(new String[]{"ui.phone = ? ", phone});
                     
-                    if(!position.contains("Cualquiera")) sentencesAndValues.add(new String[]{"u.position = ?", position});
+                    if(!position.contains("Cualquiera")) sentencesAndValues.add(new String[]{"u.position = ? ", position});
                     
                     listUsers = userService.searchUsers(sentencesAndValues);
                     
