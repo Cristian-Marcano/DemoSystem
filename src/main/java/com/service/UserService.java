@@ -81,13 +81,13 @@ public class UserService extends Database {
     
     //* Buscar usuarios por sus distintos datos, como username, role, nombre o apellido etc
     public List<Object[]> searchUsers(List<String[]> sentencesAndValues) throws SQLException {
-        String sql = "SELECT * FROM user_account AS u JOIN user_account_info AS ui ON u.id = ui.user_account_id";
+        String sql = "SELECT * FROM user_account AS u JOIN user_account_info AS ui ON u.id = ui.user_account_id WHERE ";
         if(!sentencesAndValues.isEmpty()) {
-            sql += " WHERE ";
             for(String[] sentence: sentencesAndValues) 
                 sql += (sql.endsWith("? ")) ? "AND " + sentence[0] : sentence[0];
-            sql += "AND u.id <> ?";
+            sql += "AND ";
         }
+        sql += "u.id <> ?";
         applyConnection();
         statement = connection.prepareStatement(sql);
         int i;
