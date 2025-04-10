@@ -27,9 +27,26 @@ import javax.swing.JPanel;
 /**
  *
  * @author Cristian
+ * Clase componente que ese encarga de la renderizacion de los UserItem,
+ * SideBar, Formulario y de la busqueda, registro y edicion de los usuarios
  */
 public class UserPanel extends javax.swing.JPanel {
 
+    /**
+     * Atributos que mejoran la UI, funcionalidad y logica de la clase
+     * 
+     * sideBar: objeto que crea una animacion de despliege que oculta o muestra el formulario que se encuentra dentro de este
+     * itemEvent: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos con los userItems
+     * userEvent: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos con el formulario 
+     * componentLoader: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos
+     * listUsers: listado de usuarios obtenidos por la DB
+     * addFormUser: componente que contiene el formulario que sera usado solamente para registrar
+     * searchFormUser: componente que contiene el formulario que sera usado solamente para realizar la busqueda
+     * editFormUser: componente que contiene el formulario que sera usado solamente para editar el usuario seleccionado
+     * btnAdd: boton que muestra el addFormUser que se encuentra en el sideBar 
+     * btnSearch: boton que muestra el searchFormUser que se encuentra en el sideBar
+     */
+    
     private SideBar sideBar;
     private ItemEvent itemEvent;
     private FormUserEvent userEvent;
@@ -46,16 +63,16 @@ public class UserPanel extends javax.swing.JPanel {
         
         this.componentLoader = componentLoader;
         
-        itemEvent = new ItemEvent() {
+        itemEvent = new ItemEvent() { // Procesos que sucederan si presiona uno de los btns de los UserItems
             @Override
             public void onClick(Product product) { }
 
-            @Override
+            @Override //* Obtiene la informacion del UserItem y lo envia al formulario para editarla
             public void onEdit(User user, UserInfo userInfo) {
                 btnAdd.setVisible(false);
                 btnSearch.setVisible(false);
                 
-                sideBar.setPanel(editFormUser);
+                sideBar.setPanel(editFormUser); // Cambia el formulario del sideBar
                 editFormUser.setUser(user, userInfo);
                 
                 sideBar.toggle();
@@ -64,19 +81,11 @@ public class UserPanel extends javax.swing.JPanel {
                 scroll.setEnabled(!scroll.isEnabled());
             }
 
-            @Override
+            @Override //* Obtiene el id del usuario mostrado en el userItem para eliminarlo y luego refrescar la interfaz
             public void onRemove(int id) {
                 try {
                     UserService userService = new UserService();
                     userService.removeUser(id);
-                    
-                    btnAdd.setVisible(true);
-                    btnSearch.setVisible(true);
-                    
-                    sideBar.toggle();
-                
-                    scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
-                    scroll.setEnabled(!scroll.isEnabled());
                     
                     content.removeAll();
                     
@@ -91,7 +100,8 @@ public class UserPanel extends javax.swing.JPanel {
         };
         
         userEvent = new FormUserEvent() {
-            @Override
+            
+            @Override //* Registra el usuario en la DB con sus respectivos datos obtenidos del addFormUser
             public void onCreate(String username, String password, String firstName, String lastName, String ci, String phone, String position) throws Exception {
                 UserService userService = new UserService();
                 UserInfoService userInfoService = new UserInfoService();
@@ -133,7 +143,7 @@ public class UserPanel extends javax.swing.JPanel {
                 }
             }
 
-            @Override
+            @Override //* Elabora la sentencia para realizar la peticion a la DB con los datos enviados del searchFormUser
             public void onSearch(String username, String firstName, String lastName, String ci, String phone, String position) {
                 UserService userService = new UserService();
                 
@@ -172,7 +182,7 @@ public class UserPanel extends javax.swing.JPanel {
                 }
             }
             
-            @Override
+            @Override //* Edita el usuario con los datos recibidos del editFormUser
             public void onEdit(User user, UserInfo userInfo) throws Exception {
                 UserService userService = new UserService();
                 UserInfoService userInfoService = new UserInfoService();
@@ -218,6 +228,7 @@ public class UserPanel extends javax.swing.JPanel {
         layared.setLayout(null);
         glassPane.setVisible(false);
         
+        // Instancia el sideBar para mostrar de mejor manera el formulario
         sideBar = new SideBar(layared, (com.component.complement.GlassPane) glassPane);
         
         layared.add(sideBar, JLayeredPane.POPUP_LAYER);
@@ -225,6 +236,7 @@ public class UserPanel extends javax.swing.JPanel {
         layared.add(btnSearch, JLayeredPane.MODAL_LAYER);
     }
     
+    //* Instancia los demas componentes para no sobre cargar el constructor
     private void initOthersElements() {
         btnAdd = new ActionButton(10); 
         btnSearch = new ActionButton(10);
@@ -244,12 +256,12 @@ public class UserPanel extends javax.swing.JPanel {
         btnSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         btnAdd.addActionListener(new ActionListener() {
-            @Override
+            @Override //* Si se clickea el btnAdd se hace invisible los demas btn, tambien cambia el formulario del sideBar y se desactiva el scroll
             public void actionPerformed(ActionEvent evt) {
                 btnAdd.setVisible(false);
                 btnSearch.setVisible(false);
                 
-                sideBar.setPanel(addFormUser);
+                sideBar.setPanel(addFormUser); // Se cambia al addFormUser
                 sideBar.toggle();
                 
                 scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
@@ -258,7 +270,7 @@ public class UserPanel extends javax.swing.JPanel {
         });
         
         btnSearch.addActionListener(new ActionListener() {
-            @Override
+            @Override //* Si se clickea el btnSearch se hace invisible los demas btn, tambien cambia el formulario del sideBar y se desactiva el scroll
             public void actionPerformed(ActionEvent evt) {
                 btnAdd.setVisible(false);
                 btnSearch.setVisible(false);
@@ -272,7 +284,7 @@ public class UserPanel extends javax.swing.JPanel {
         });
         
         glassPane.addMouseListener(new MouseAdapter() {
-            @Override
+            @Override //* Si clickea glassPane cuando el sideBar se esta mostrando, se oculta el sideBar tanto hace Visible y habilita los btns e scroll
             public void mousePressed(MouseEvent evt) {
                 sideBar.toggle();
                 
@@ -285,8 +297,9 @@ public class UserPanel extends javax.swing.JPanel {
         });
     }
     
+    //* Comienza a instanciar los userItems con el listado de usuarios obtenidos en la DB, para luego renderizarlos
     public void initUserContent() {
-        if(listUsers.isEmpty()) {
+        if(listUsers.isEmpty()) { // Si esta vacio realiza la peticion a la DB
             UserService userService = new UserService();
             
             try { 
@@ -299,21 +312,21 @@ public class UserPanel extends javax.swing.JPanel {
             }
         }
         
-        List<JPanel> listPanels = new ArrayList<>();
+        List<JPanel> listPanels = new ArrayList<>(); // Listado de userItems que seran añadidos
         
         try {
             
             for(Object[] userValue: listUsers)
                 listPanels.add(new UserItem((User) userValue[0], (UserInfo) userValue[1], itemEvent));
             
-            componentLoader.scrollableContentLoader(listPanels);
+            componentLoader.scrollableContentLoader(listPanels); // Carga el listado de items 
             
         } catch(Exception e) {
             System.err.println(e.getMessage());
             JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
         }
         
-        listUsers.clear();
+        listUsers.clear(); // Limpia el listado de usuarios obtenidos de la DB
     }    
 
     /**
@@ -396,12 +409,13 @@ public class UserPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //* Cambia la posicion de los btns cada vez que se reescale este componente
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
         btnAdd.setLocation(layared.getSize().width - 52, layared.getSize().height - 60);
         btnSearch.setLocation(layared.getSize().width - 52, layared.getSize().height - 120);
         
         try {
-            componentLoader.resizeContentLoader();
+            componentLoader.resizeContentLoader(); // Reajusta el tamaño content dependiendo de la cantidad de items que contenga
         } catch(Exception e) {
             System.err.println(e.getMessage());
             JOptionPane.showMessageDialog(null,"No se puede avanzar debido a que: \n" + e.getMessage(),"Advertencia",JOptionPane.WARNING_MESSAGE);
