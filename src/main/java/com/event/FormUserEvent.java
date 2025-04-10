@@ -6,6 +6,8 @@ import com.model.UserInfo;
 /**
  *
  * @author Cristian
+ * Interface de eventos que se ejecutan para realizar
+ * un proceso en el formulario de Usuario
  */
 public interface FormUserEvent {
     

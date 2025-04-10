@@ -7,8 +7,7 @@ import com.model.UserInfo;
 /**
  *
  * @author Cristian
- * Interface de eventos de Items que se encuentran
- * en el inputSearch del PanelSearch
+ * Interface de eventos de Items
  */
 public interface ItemEvent {
     

@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 /**
  *
  * @author Cristian
+ * Interface de metodos que se ejecutan para realizar los
+ * procesos faltantes para cargar mejor el componente
  */
 public interface ComponentLoader {
     
