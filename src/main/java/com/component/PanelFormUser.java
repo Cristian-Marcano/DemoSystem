@@ -11,10 +11,22 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Cristian
+ * Clase de componente visual que se encarga de mostrar
+ * los inputs del formulario ya sea para crear, editar o buscar
  */
 public class PanelFormUser extends javax.swing.JPanel {
     
-    private int mode; // 0: buscar. 1: crear. 2: editar
+    /**
+     * Atributos que mejoran e facilitan la impletmentacion de la logica de la clase
+     * 
+     * mode: constante que ayuda en la reutilizacion del componente para realizar distintos procesos
+     * user: objeto que contiene los datos user que fue seleccionado para editar
+     * userInfo: objeto que almacena la info personal del usuario seleccionado
+     * show: dato que valida si mostrar el texto del inputPassword, cuando iconShowAndHidden es presionado
+     * userEvent: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos y dependiendo el mode
+     */
+    
+    private final int mode; // 0: buscar. 1: crear. 2: editar
     private User user;
     private UserInfo userInfo;
     private boolean show = false;
@@ -48,12 +60,14 @@ public class PanelFormUser extends javax.swing.JPanel {
         }
     }
     
+    //* Instancia|Cambia el valor del usuario que va ser editado
     public void setUser(User user, UserInfo userInfo) {
         this.user = user;
         this.userInfo = userInfo;
         setValues();
     }
     
+    //* Se inserta los valores del usuario que va ser editado en los inputs
     private void setValues() {
         inputUsername.setText(user.getUsername());
         inputFirstName.setText(userInfo.getFirstName());
@@ -61,6 +75,7 @@ public class PanelFormUser extends javax.swing.JPanel {
         inputCI.setText(userInfo.getCi());
         inputPhone.setText(userInfo.getPhone());
         inputPassword.setText(user.getPassword());
+        selectRole.setSelectedIndex(user.getPosition().contains("employee") ? 0 : 1);
     }
 
     /**
@@ -343,6 +358,7 @@ public class PanelFormUser extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //* Cambia la legibilidad del texto que se encuentra en el inputPassword presionando el iconShowAndHidden
     private void iconShowAndHiddenMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconShowAndHiddenMouseClicked
         show = !show;
         if(show) {
@@ -354,6 +370,7 @@ public class PanelFormUser extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_iconShowAndHiddenMouseClicked
 
+    //* Extrae el texto de los inputs y dependiento del mode los valida para realizar sus respectivos procesos; buscar, crear o editar
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
         try {
             
