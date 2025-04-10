@@ -3,9 +3,12 @@ package com.view;
 import com.component.Header;
 import com.component.MenuBar;
 import com.component.SalePanel;
+import com.component.UserPanel;
 import com.demo.Demo;
+import com.event.ComponentLoader;
 import com.util.ShowJPanel;
 import java.awt.Dimension;
+import java.util.List;
 import javax.swing.JPanel;
 
 /**
@@ -26,6 +29,7 @@ public class Background extends javax.swing.JPanel {
      */
     
     public Header panelHeader;
+    public ComponentLoader componentLoader;
     public ShowJPanel board, headerP, contentP;
 
     /**
@@ -33,11 +37,34 @@ public class Background extends javax.swing.JPanel {
      */
     public Background() {
         initComponents();
+        
+        componentLoader = new ComponentLoader() {
+            @Override
+            public void scrollableContentLoader(List<JPanel> listPanels) throws Exception {
+                contentP.showItemsPanel(listPanels);
+            }
+            
+            @Override
+            public void resizeContentLoader() throws Exception {
+                contentP.resizeScrollPane();
+            }
+            
+            @Override
+            public void refreshContent() {
+                contentP.refreshContainer();
+            }
+        };
+        
         panelHeader = new Header();
         panelHeader.setUserInfo(Demo.user);
+        
+        UserPanel userPanel = new UserPanel(componentLoader);
+        
         board = initPanel(new MenuBar(), dashboard, new Dimension(dashboard.getPreferredSize()));
         headerP = initPanel(panelHeader, header, new Dimension(header.getPreferredSize()));
-        contentP = initPanel(new SalePanel(), content, new Dimension(content.getPreferredSize()));
+        contentP = initPanel(userPanel, content, new Dimension(content.getPreferredSize()));
+        
+        userPanel.initUserContent();
     }
     
     //* Instanciacion del objeto ShowJPanel, pasando por parametros el panel que sera mostrado,
