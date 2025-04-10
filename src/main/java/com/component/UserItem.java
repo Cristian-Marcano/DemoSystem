@@ -8,8 +8,20 @@ import java.awt.Color;
 /**
  *
  * @author Cristian
+ * Clase componente visual que contiene los datos de un item
+ * (user) que se este filtrando o no en el UserPanel
  */
 public class UserItem extends javax.swing.JPanel {
+    
+    /**
+     * Atributos que facilita la funcionalidad de la clase
+     * 
+     * user: objeto que contiene los datos del usuario que va mostrar este item
+     * userInfo: objeto que almacena los informacion personal del usuario que se muestra en este item
+     * itemEvent: variable que contiene funciones que se ejecutan cuando ocurren ciertos eventos
+     * normal: color por defecto de los btnEdit y btnRemove
+     * hover: color de los btnEdit y btnRemove cuando se le hace hover
+     */
     
     private User user;
     private UserInfo userInfo;
@@ -166,26 +178,32 @@ public class UserItem extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    //* Elimina el user de este item y refresca la interfaz visual
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         itemEvent.onRemove(user.getId());
     }//GEN-LAST:event_btnRemoveActionPerformed
 
+    //* Envia los datos de este item al PanelFormUser para editarlo en la DB
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         itemEvent.onEdit(user, userInfo);
     }//GEN-LAST:event_btnEditActionPerformed
 
+    //* Cambia el background cuando se le hace hover
     private void btnRemoveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoveMouseEntered
         btnRemove.setBackground(hover);
     }//GEN-LAST:event_btnRemoveMouseEntered
 
+    //* Cambia el background cuando se le deja de hacer hover
     private void btnRemoveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoveMouseExited
         btnRemove.setBackground(normal);
     }//GEN-LAST:event_btnRemoveMouseExited
 
+    //* Cambia el background cuando se le hace hover
     private void btnEditMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditMouseEntered
         btnEdit.setBackground(hover);
     }//GEN-LAST:event_btnEditMouseEntered
 
+    //* Cambia el background cuando se le deja de hacer hover
     private void btnEditMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditMouseExited
         btnEdit.setBackground(normal);
     }//GEN-LAST:event_btnEditMouseExited
