@@ -94,10 +94,12 @@ public class ProductService extends Database {
     //* Reducir el stock de un producto
     public void decreaseStock(int id, int quantity) throws SQLException {
         String sql = "UPDATE product SET availability = availability - ? WHERE id = ?";
+        applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setInt(1, quantity);
         statement.setInt(2, id);
         statement.executeUpdate();
+        closeConnection();
     }
     
     //* Reducir el stock a cada uno de los productos que fueron vendidos
