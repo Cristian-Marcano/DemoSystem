@@ -192,6 +192,7 @@
                 <Column editable="true" title="Accion" type="java.lang.Object"/>
               </Table>
             </Property>
+            <Property name="rowHeight" type="int" value="31"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new com.component.complement.TableCustom(new Color(41,117,185), new Color(162,175,186), new Color(200,218, 234), new Color(160,160,175))"/>

@@ -2,16 +2,22 @@ package com.component;
 
 import com.component.complement.SideBar;
 import com.event.FormProductEvent;
+import com.event.TableActionEvent;
 import com.model.Product;
 import com.service.ProductService;
+import com.ui.TableActionCellEditor;
+import com.ui.TableActionCellRender;
 import java.awt.Color;
 import com.util.TextPrompt;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,7 +26,9 @@ import javax.swing.JOptionPane;
 public class InventoryPanel extends javax.swing.JPanel {
 
     private SideBar sideBar;
+    private TableActionEvent tableEvent;
     private FormProductEvent productEvent;
+    private List<Product> listProducts = new ArrayList<>();
     private PanelFormProduct addFormProduct, editFormProduct;
     
     public TextPrompt placeholder;
@@ -33,6 +41,55 @@ public class InventoryPanel extends javax.swing.JPanel {
         initOthersElements();
         placeholder = new TextPrompt("Insertar Nombre o ID del Producto", inputSearch);
         
+        tableEvent = new TableActionEvent() {
+            @Override
+            public void onRemove(int row) {
+                if (table.isEditing()) {
+                    table.getCellEditor().stopCellEditing();
+                }
+                
+                int id = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
+                
+                int stock = Integer.parseInt(table.getModel().getValueAt(row, 4).toString());
+                
+                try {
+                    ProductService productService = new ProductService();
+                    
+                    productService.decreaseStock(id, stock);
+                    
+                    initProductContent();
+                } catch(SQLException e) {
+                    System.err.println(e.getMessage());
+                    JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            @Override
+            public void onEdit(int row) {
+                if (table.isEditing()) {
+                    table.getCellEditor().stopCellEditing();
+                }
+                
+                int id = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
+                String name = table.getModel().getValueAt(row, 1).toString(), detail = table.getModel().getValueAt(row, 2).toString();
+                BigDecimal price = new BigDecimal(table.getModel().getValueAt(row, 3).toString());
+                int availability = Integer.parseInt(table.getModel().getValueAt(row, 4).toString());
+                
+                Product product = new Product(id, availability, name, detail, price);
+                
+                editFormProduct.setProduct(product);
+                
+                btnAdd.setVisible(false);
+                sideBar.setPanel(editFormProduct);
+                sideBar.toggle();
+                
+                table.setEnabled(!table.isEnabled());
+                
+                scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                scroll.setEnabled(!scroll.isEnabled());
+            }
+        };
+        
         productEvent = new FormProductEvent() {
             @Override
             public void onCreate(String title, String detail, int availability, String price) throws Exception {
@@ -42,6 +99,8 @@ public class InventoryPanel extends javax.swing.JPanel {
                     BigDecimal priceDecimal = new BigDecimal(price);
                     
                     productService.createProduct(title, detail, availability, priceDecimal);
+                    
+                    initProductContent();
                     
                 } catch(SQLException e) {
                     
@@ -61,6 +120,7 @@ public class InventoryPanel extends javax.swing.JPanel {
                 
                     productService.updateProduct(product);
                     
+                    initProductContent();
                 } catch(SQLException e) {
                     
                     if(e.getErrorCode() == 1062) {
@@ -72,6 +132,11 @@ public class InventoryPanel extends javax.swing.JPanel {
                 }
             }
         };
+        
+//        ((com.component.complement.TableCustom) table).fixTable(scroll);
+
+        table.getColumnModel().getColumn(5).setCellRenderer(new TableActionCellRender(false, new Color(162,175,186), new Color(200, 218, 234)));
+        table.getColumnModel().getColumn(5).setCellEditor(new TableActionCellEditor(tableEvent, false, new Color(162,175,186), new Color(200, 218, 234)));
         
         setComponentZOrder(layared, 0);
         
@@ -93,10 +158,38 @@ public class InventoryPanel extends javax.swing.JPanel {
                 btnAdd.setVisible(true);
                 sideBar.toggle();
                 
+                table.setEnabled(!table.isEnabled());
+                
                 scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
                 scroll.setEnabled(!scroll.isEnabled());
             }
         });
+    }
+    
+    public void initProductContent() {
+        if(listProducts.isEmpty()) {
+            ProductService productService = new ProductService();
+            
+            try {
+                listProducts = productService.getProducts();
+                
+            } catch(SQLException e) {
+                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        
+        if(model.getRowCount() > 0) {
+            model.setRowCount(0);
+        }
+        
+        for(Product product: listProducts)
+            model.addRow(new Object[]{product.getId(), product.getTitle(), product.getDetail(), product.getPrice(), product.getAvailability()});
+        
+        listProducts.clear();
     }
 
     /**
@@ -196,6 +289,7 @@ public class InventoryPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        table.setRowHeight(31);
         scroll.setViewportView(table);
 
         javax.swing.GroupLayout glassPaneLayout = new javax.swing.GroupLayout(glassPane);
@@ -250,6 +344,8 @@ public class InventoryPanel extends javax.swing.JPanel {
         btnAdd.setVisible(false);
         sideBar.setPanel(addFormProduct);
         sideBar.toggle();
+        
+        table.setEnabled(!table.isEnabled());
         
         scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
         scroll.setEnabled(!scroll.isEnabled());
