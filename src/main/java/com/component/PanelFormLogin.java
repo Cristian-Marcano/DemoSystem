@@ -109,7 +109,6 @@ public class PanelFormLogin extends javax.swing.JPanel {
         btnFotgotPassword.setText("¿Olvido la Contraseña?");
         btnFotgotPassword.setBorder(null);
         btnFotgotPassword.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFotgotPassword.setOpaque(true);
 
         btnLogin.setBackground(new java.awt.Color(45, 155, 240));
         btnLogin.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
