@@ -223,9 +223,9 @@ public class PanelFormUser extends javax.swing.JPanel {
         });
 
         btn.setBackground(new java.awt.Color(45, 155, 240));
-        btn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btn.setForeground(new java.awt.Color(250, 250, 250));
-        btn.setText("Registrarse");
+        btn.setText("Registrar");
         btn.setBorder(null);
         btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn.setPreferredSize(new java.awt.Dimension(92, 30));
