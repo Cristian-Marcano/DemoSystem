@@ -1,11 +1,14 @@
 package com.demo;
 
 import com.DB.Database;
+import com.model.Sale;
 import com.model.User;
 import com.service.UserService;
 import com.view.Background;
+import com.view.Invoice;
 import com.view.Login;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -26,6 +29,7 @@ public class Demo extends javax.swing.JFrame {
      */
     
     public static Login login;
+    public static Invoice invoice;
     public static Background background;
     public static User user;
     
@@ -58,7 +62,13 @@ public class Demo extends javax.swing.JFrame {
     //* Cambia la vista de la ventana al Login
     public void goToLoginView() {
         login = new Login();
+        login.initFormLogin();
         setView(login);
+    }
+    
+    public void goToInvoiceView(Object[] saleInvoice, List<Sale> sales) {
+        invoice = new Invoice(saleInvoice, sales);
+        setView(invoice);
     }
     
     //* Cambia la vista de la ventana por cualquier panel que se le pase por paramatro
