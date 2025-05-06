@@ -9,6 +9,7 @@ import com.ui.TableActionCellEditor;
 import com.ui.TableActionCellRender;
 import java.awt.Color;
 import com.util.TextPrompt;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -26,6 +30,7 @@ import javax.swing.table.DefaultTableModel;
 public class InventoryPanel extends javax.swing.JPanel {
 
     private SideBar sideBar;
+    private Timer debounceTimer;
     private TableActionEvent tableEvent;
     private FormProductEvent productEvent;
     private List<Product> listProducts = new ArrayList<>();
@@ -38,8 +43,32 @@ public class InventoryPanel extends javax.swing.JPanel {
      */
     public InventoryPanel() {
         initComponents();
-        initOthersElements();
+        
         placeholder = new TextPrompt("Insertar Nombre o ID del Producto", inputSearch);
+        
+        debounceTimer = new Timer(500, (ActionEvent evt) -> {
+            String search = inputSearch.getText().trim();
+            
+            List<String[]> sentencesAndValues = new ArrayList<>();
+            
+            if(search.matches("\\d+")) {
+                sentencesAndValues.add(new String[]{"id = ?", search});
+            } else sentencesAndValues.add(new String[]{"title LIKE ?", "%" + search + "%"});
+            
+            try {
+                ProductService productService = new ProductService();
+            
+                listProducts = productService.searchProduct(sentencesAndValues);
+                
+                initProductContent();
+                
+            } catch(SQLException e) {
+                System.err.println(e.getMessage());
+                JOptionPane.showMessageDialog(null,"Ocurrio un Error en la conexion con la Base de Datos","ERROR",JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        
+        debounceTimer.setRepeats(false); // no Repetir el timer
         
         tableEvent = new TableActionEvent() {
             @Override
@@ -100,6 +129,14 @@ public class InventoryPanel extends javax.swing.JPanel {
                     
                     productService.createProduct(title, detail, availability, priceDecimal);
                     
+                    btnAdd.setVisible(true);
+                    sideBar.toggle();
+                
+                    table.setEnabled(!table.isEnabled());
+                
+                    scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                    scroll.setEnabled(!scroll.isEnabled());
+                    
                     initProductContent();
                     
                 } catch(SQLException e) {
@@ -120,6 +157,14 @@ public class InventoryPanel extends javax.swing.JPanel {
                 
                     productService.updateProduct(product);
                     
+                    btnAdd.setVisible(true);
+                    sideBar.toggle();
+                
+                    table.setEnabled(!table.isEnabled());
+                
+                    scroll.getVerticalScrollBar().setVisible(!scroll.getVerticalScrollBar().isVisible());
+                    scroll.setEnabled(!scroll.isEnabled());
+                    
                     initProductContent();
                 } catch(SQLException e) {
                     
@@ -133,7 +178,21 @@ public class InventoryPanel extends javax.swing.JPanel {
             }
         };
         
-//        ((com.component.complement.TableCustom) table).fixTable(scroll);
+        inputSearch.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                debounceTimer.restart();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                debounceTimer.restart();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                debounceTimer.restart(); // Para atributos (poco común en JTextField)
+            }
+        });
+        
+        initOthersElements();
 
         table.getColumnModel().getColumn(5).setCellRenderer(new TableActionCellRender(false, new Color(162,175,186), new Color(200, 218, 234)));
         table.getColumnModel().getColumn(5).setCellEditor(new TableActionCellEditor(tableEvent, false, new Color(162,175,186), new Color(200, 218, 234)));
