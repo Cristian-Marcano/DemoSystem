@@ -1,14 +1,19 @@
 package com.view;
 
 import com.component.Header;
+import com.component.InventoryPanel;
 import com.component.MenuBar;
 import com.component.SalePanel;
+import com.component.TrackRecordPanel;
 import com.component.UserPanel;
 import com.demo.Demo;
 import com.event.ComponentLoader;
+import com.model.Sale;
 import com.util.ShowJPanel;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -30,6 +35,10 @@ public class Background extends javax.swing.JPanel {
      */
     
     public Header panelHeader;
+    public UserPanel userPanel;
+    public SalePanel salePanel;
+    public InventoryPanel inventoryPanel;
+    public TrackRecordPanel trackRecordPanel;
     public ComponentLoader componentLoader;
     public ShowJPanel board, headerP, contentP;
 
@@ -54,18 +63,46 @@ public class Background extends javax.swing.JPanel {
             public void refreshContent() {
                 contentP.refreshContainer();
             }
+            
+            @Override
+            public void setContentPane(String namePane) {
+                if(namePane.contains("UserPanel")) {
+                    userPanel = new UserPanel(componentLoader);
+                    contentP.setPanel(userPanel);
+                    userPanel.initUserContent();
+                } else if(namePane.contains("SalePanel")) {
+                    salePanel = new SalePanel(componentLoader);
+                    contentP.setPanel(salePanel);
+                } else if(namePane.contains("InventoryPanel")) { 
+                    inventoryPanel = new InventoryPanel();
+                    inventoryPanel.initProductContent();
+                    contentP.setPanel(inventoryPanel);
+                }
+                contentP.showPanel();
+            }
+            
+            @Override
+            public void goToInvoice(Object[] saleInvoice, List<Sale> sales) {
+                initInvoice(saleInvoice, sales);
+            }
+            
+            @Override
+            public void goToLogin() {
+                initLogin();
+            }
         };
         
         panelHeader = new Header();
         panelHeader.setUserInfo(Demo.user);
         
-        UserPanel userPanel = new UserPanel(componentLoader);
+        salePanel = new SalePanel(componentLoader);
         
-        board = initPanel(new MenuBar(), dashboard, new Dimension(dashboard.getPreferredSize()));
+        board = initPanel(new MenuBar(componentLoader), dashboard, new Dimension(dashboard.getPreferredSize()));
         headerP = initPanel(panelHeader, header, new Dimension(header.getPreferredSize()));
-        contentP = initPanel(userPanel, content, new Dimension(content.getPreferredSize()));
+        contentP = initPanel(salePanel, content, new Dimension(content.getPreferredSize()));
         
-        userPanel.initUserContent(); // Inicia la carga de listado de usuarios
+        //userPanel.initUserContent(); // Inicia la carga de listado de usuarios
+        //inventoryPanel.initProductContent(); // Inicia la carga de listado de productos
     }
     
     //* Instanciacion del objeto ShowJPanel, pasando por parametros el panel que sera mostrado,
@@ -75,6 +112,34 @@ public class Background extends javax.swing.JPanel {
         ShowJPanel show = new ShowJPanel(panel, container, size);
         show.showPanel();
         return show;
+    }
+    
+    private Demo getDemoWindow() {
+        Component comp = this.getParent();
+        
+        while((!(comp instanceof JFrame)) && comp != null)
+            comp = comp.getParent();
+
+        if(comp instanceof Demo) {
+            Demo demoWindow = (Demo) comp;
+            return demoWindow;
+        }
+
+        return null;
+    }
+    
+    public void initInvoice(Object[] saleInvoice, List<Sale> sales) {
+        Demo demoWindow = getDemoWindow();
+        
+        if(demoWindow != null) 
+            demoWindow.goToInvoiceView(saleInvoice, sales);
+    }
+    
+    public void initLogin() {
+        Demo demoWindow = getDemoWindow();
+        
+        if(demoWindow != null)
+            demoWindow.goToLoginView();
     }
 
     /**
