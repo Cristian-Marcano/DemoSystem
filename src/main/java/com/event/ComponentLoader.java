@@ -1,5 +1,6 @@
 package com.event;
 
+import com.model.Sale;
 import java.util.List;
 import javax.swing.JPanel;
 
@@ -16,4 +17,10 @@ public interface ComponentLoader {
     public void resizeContentLoader() throws Exception;
     
     public void refreshContent();
+    
+    public void setContentPane(String namePane);
+    
+    public void goToInvoice(Object[] saleInvoice, List<Sale> sales);
+    
+    public void goToLogin();
 }
