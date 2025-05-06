@@ -80,13 +80,14 @@ public class ProductService extends Database {
     
     //* Editar Producto
     public void updateProduct(Product product) throws SQLException {
-        String sql = "UPDATE product SET title = ?, detail = ?, avalability = ?, price = ? WHERE id = ?";
+        String sql = "UPDATE product SET title = ?, detail = ?, availability = ?, price = ? WHERE id = ?";
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setString(1, product.getTitle());
         statement.setString(2, product.getDetail());
         statement.setInt(3, product.getAvailability());
         statement.setBigDecimal(4, product.getPrice());
+        statement.setInt(5, product.getId());
         statement.executeUpdate();
         closeConnection();
     }

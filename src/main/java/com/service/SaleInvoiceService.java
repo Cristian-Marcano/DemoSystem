@@ -20,7 +20,7 @@ public class SaleInvoiceService extends Database {
     
     //* Obtener factura por su id
     public Object[] getSaleInvoice(int id) throws SQLException {
-        String sql = "SELECT * FROM sale_invoice AS si JOIN user_account AS ua ON si.user_account_id = ua.id JOIN costumer AS c ON si.costumer_id = c.id WHERE id = ?";
+        String sql = "SELECT * FROM sale_invoice AS si JOIN user_account AS ua ON si.user_account_id = ua.id JOIN costumer AS c ON si.costumer_id = c.id WHERE si.id = ?";
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setInt(1, id);
@@ -107,7 +107,7 @@ public class SaleInvoiceService extends Database {
         applyConnection();
         statement = connection.prepareStatement(sql);
         statement.setBigDecimal(1, invoice.getTotal());
-        statement.setBigDecimal(2, invoice.getSubtTotal());
+        statement.setBigDecimal(2, invoice.getSubTotal());
         statement.setBigDecimal(3, invoice.getTax());
         statement.setInt(4, invoice.getUserId());
         statement.setInt(5, invoice.getClientId());
