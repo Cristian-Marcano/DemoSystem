@@ -57,7 +57,7 @@ public class SaleInvoice {
         return total;
     }
     
-    public BigDecimal getSubtTotal() {
+    public BigDecimal getSubTotal() {
         return subTotal;
     }
     
