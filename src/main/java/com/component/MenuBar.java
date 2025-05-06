@@ -1,5 +1,6 @@
 package com.component;
 
+import com.event.ComponentLoader;
 import java.awt.Color;
 
 /**
@@ -8,13 +9,16 @@ import java.awt.Color;
  */
 public class MenuBar extends javax.swing.JPanel {
 
-    public Color normal = new Color(51,143,214), hover = new Color(41,113,184);
+    private ComponentLoader componentLoader;
+    
+    public final Color normal = new Color(51,143,214), hover = new Color(41,113,184);
     
     /**
      * Creates new form MenuBar
      */
-    public MenuBar() {
+    public MenuBar(ComponentLoader componentLoader) {
         initComponents();
+        this.componentLoader = componentLoader;
     }
 
     /**
@@ -231,7 +235,7 @@ public class MenuBar extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRegisterSaleMouseExited
 
     private void btnRegisterSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterSaleActionPerformed
-        
+        componentLoader.setContentPane("SalePanel");
     }//GEN-LAST:event_btnRegisterSaleActionPerformed
 
     private void btnTrackRecordMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTrackRecordMouseEntered
@@ -263,7 +267,7 @@ public class MenuBar extends javax.swing.JPanel {
     }//GEN-LAST:event_btnInventoryMouseExited
 
     private void btnInventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventoryActionPerformed
-        
+        componentLoader.setContentPane("InventoryPanel");
     }//GEN-LAST:event_btnInventoryActionPerformed
 
     private void btnLogOutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogOutMouseEntered
@@ -279,7 +283,7 @@ public class MenuBar extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLogOutMouseExited
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
-        
+        componentLoader.goToLogin();
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void btnUsersMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUsersMouseEntered
@@ -295,7 +299,7 @@ public class MenuBar extends javax.swing.JPanel {
     }//GEN-LAST:event_btnUsersMouseExited
 
     private void btnUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsersActionPerformed
-        // TODO add your handling code here:
+        componentLoader.setContentPane("UserPanel");
     }//GEN-LAST:event_btnUsersActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
