@@ -1,6 +1,7 @@
 package com.component;
 
 import com.demo.Demo;
+import com.event.ComponentLoader;
 import com.event.ItemEvent;
 import com.model.Product;
 import com.ux.TableStockCellEditor;
@@ -59,6 +60,7 @@ public class SalePanel extends javax.swing.JPanel {
     private Client client = null;
     private JPopupMenu searchMenu;
     private PanelSearch panelSearch;
+    private ComponentLoader componentLoader;
     private List<Product> listProductOnTable = new ArrayList<>();
     private Set<Product> selectedProducts = new HashSet<>();
     private List<Object[]> listProducts = new ArrayList<>();
@@ -70,8 +72,10 @@ public class SalePanel extends javax.swing.JPanel {
     /**
      * Creates new form SalePanel
      */
-    public SalePanel() {
+    public SalePanel(ComponentLoader componentLoader) {
         initComponents();
+        
+        this.componentLoader = componentLoader;
         
         //* Cambia de lugar la flecha del JComboBox a la izquierda
         selectClientRif.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
@@ -225,7 +229,7 @@ public class SalePanel extends javax.swing.JPanel {
         panelTabClient.repaint();
     }
     
-    //* habilita y deshabilita los inputs en el caso de que solo mostrar informacion
+    //* Habilita y deshabilita los inputs en el caso de que solo mostrar informacion
     private void setEnabledFormClient(boolean enable) {
         inputClientFullName.setEnabled(enable);
         inputClientPhone.setEnabled(enable);
@@ -868,6 +872,10 @@ public class SalePanel extends javax.swing.JPanel {
                 
                 SaleService saleService = new SaleService();
                 saleService.createSales(listTable);
+                
+                Object[] saleInvoice = saleInvoiceService.getSaleInvoice(saleInvoiceId);
+                
+                componentLoader.goToInvoice(saleInvoice, listTable);
             } catch(SQLException e) {
                 
                 try {
