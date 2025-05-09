@@ -1,6 +1,7 @@
 package com.view;
 
 import com.component.Header;
+import com.component.HomePanel;
 import com.component.InventoryPanel;
 import com.component.MenuBar;
 import com.component.SalePanel;
@@ -37,6 +38,7 @@ public class Background extends javax.swing.JPanel {
     public Header panelHeader;
     public UserPanel userPanel;
     public SalePanel salePanel;
+    public HomePanel homePanel;
     public InventoryPanel inventoryPanel;
     public TrackRecordPanel trackRecordPanel;
     public ComponentLoader componentLoader;
@@ -77,6 +79,9 @@ public class Background extends javax.swing.JPanel {
                     inventoryPanel = new InventoryPanel();
                     inventoryPanel.initProductContent();
                     contentP.setPanel(inventoryPanel);
+                } else if(namePane.contains("HomePanel")) {
+                    homePanel = new HomePanel();
+                    contentP.setPanel(homePanel);
                 }
                 contentP.showPanel();
             }
@@ -95,11 +100,11 @@ public class Background extends javax.swing.JPanel {
         panelHeader = new Header();
         panelHeader.setUserInfo(Demo.user);
         
-        salePanel = new SalePanel(componentLoader);
+        homePanel = new HomePanel();
         
         board = initPanel(new MenuBar(componentLoader), dashboard, new Dimension(dashboard.getPreferredSize()));
         headerP = initPanel(panelHeader, header, new Dimension(header.getPreferredSize()));
-        contentP = initPanel(salePanel, content, new Dimension(content.getPreferredSize()));
+        contentP = initPanel(homePanel, content, new Dimension(content.getPreferredSize()));
         
         //userPanel.initUserContent(); // Inicia la carga de listado de usuarios
         //inventoryPanel.initProductContent(); // Inicia la carga de listado de productos

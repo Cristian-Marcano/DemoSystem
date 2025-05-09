@@ -195,7 +195,7 @@ public class PanelFormUser extends javax.swing.JPanel {
         selectRole.setBackground(new java.awt.Color(180, 180, 180));
         selectRole.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         selectRole.setForeground(new java.awt.Color(55, 55, 55));
-        selectRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empleado", "Admin" }));
+        selectRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Empleado", "Supervisor", "Admin" }));
         selectRole.setBorder(null);
         selectRole.setPreferredSize(new java.awt.Dimension(97, 27));
 
@@ -214,7 +214,7 @@ public class PanelFormUser extends javax.swing.JPanel {
         iconShowAndHidden.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         iconShowAndHidden.setIcon(new javax.swing.ImageIcon(getClass().getResource("/eye.png"))); // NOI18N
         iconShowAndHidden.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(41, 117, 185)));
-        iconShowAndHidden.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        iconShowAndHidden.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         iconShowAndHidden.setOpaque(true);
         iconShowAndHidden.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -227,7 +227,7 @@ public class PanelFormUser extends javax.swing.JPanel {
         btn.setForeground(new java.awt.Color(250, 250, 250));
         btn.setText("Registrar");
         btn.setBorder(null);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btn.setPreferredSize(new java.awt.Dimension(92, 30));
         btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -378,7 +378,7 @@ public class PanelFormUser extends javax.swing.JPanel {
                     ci = inputCI.getText(), phone = inputPhone.getText(), password = new String(inputPassword.getPassword()), 
                     rol = selectRole.getSelectedItem().toString();
             
-            String position = (rol.contains("Admin")) ? "admin" : (rol.contains("Empleado")) ? "employee" : rol;
+            String position = (rol.contains("Admin")) ? "admin" : (rol.contains("Empleado")) ? "employee" : (rol.contains("Supervisor")) ? "manager" :rol;
             
             if(mode == 0) {
                 userEvent.onSearch(username, firstName, lastName, ci, phone, position);
