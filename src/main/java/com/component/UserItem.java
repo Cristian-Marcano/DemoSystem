@@ -47,7 +47,7 @@ public class UserItem extends javax.swing.JPanel {
         labelLastName.setText("Apellido: " + userInfo.getLastName());
         labelPhone.setText("Telefono: " + userInfo.getPhone());
         labelCI.setText("CI: " + userInfo.getCi());
-        labelRole.setText("Rol: " + (user.getPosition().contains("employee") ? "Empleado" : "Admin"));
+        labelRole.setText("Rol: " + (user.getPosition().contains("employee") ? "Empleado" : user.getPosition().contains("manager") ? "Supervisor" :  "Admin"));
     }
 
     /**

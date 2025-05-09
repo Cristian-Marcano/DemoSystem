@@ -72,7 +72,7 @@ public class Database {
             port = 3306;
             db = "demo_service";
             username = "root";
-            password = "Contraseña1/";
+            password = "S1805$2803s";
         }
     }
     

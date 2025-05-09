@@ -1,5 +1,6 @@
 package com.component;
 
+import com.demo.Demo;
 import com.event.ComponentLoader;
 import java.awt.Color;
 
@@ -18,6 +19,18 @@ public class MenuBar extends javax.swing.JPanel {
      */
     public MenuBar(ComponentLoader componentLoader) {
         initComponents();
+        btnTrackRecord.setVisible(false);
+        if (Demo.user.getPosition().contains("employee")) {
+            btnInventory.setVisible(false);
+            btnUsers.setVisible(false);
+        }
+        if (Demo.user.getPosition().contains("manager")) {
+            btnUsers.setVisible(false);
+        }
+        if (Demo.user.getPosition().contains("admin")) {
+            btnRegisterSale.setVisible(false);
+            btnInventory.setVisible(false);
+        }
         this.componentLoader = componentLoader;
     }
 
@@ -303,7 +316,7 @@ public class MenuBar extends javax.swing.JPanel {
     }//GEN-LAST:event_btnUsersActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-        
+        componentLoader.setContentPane("HomePanel");
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnHomeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHomeMouseExited

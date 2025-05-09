@@ -100,7 +100,7 @@
           </Border>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
+          <Color id="Cursor Por defecto"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="15"/>
@@ -132,7 +132,7 @@
           </Border>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
+          <Color id="Cursor Por defecto"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="15"/>
@@ -167,7 +167,7 @@
           </Border>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
+          <Color id="Cursor Por defecto"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="15"/>
@@ -199,7 +199,7 @@
           </Border>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
+          <Color id="Cursor Por defecto"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="15"/>
@@ -231,7 +231,7 @@
           </Border>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
+          <Color id="Cursor Por defecto"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="15"/>
@@ -263,7 +263,7 @@
           </Border>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
+          <Color id="Cursor Por defecto"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="15"/>
